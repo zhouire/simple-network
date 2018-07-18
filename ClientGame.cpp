@@ -124,7 +124,7 @@ void ClientGame::update()
 
 			case STRING_PACKET:
 
-				printf("client got stringpacket");
+				printf("client got stringpacket\n");
 
 				//sendStringPackets(mPiece);
 				addToModelVector(iter);
