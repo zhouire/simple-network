@@ -16,10 +16,14 @@ public:
 
 	void sendStringPackets(Model *);
 
+	void addToModelString(std::string *);
+
 	void addToModelVector(int);
 
     char network_data[MAX_PACKET_SIZE];
 
     void update();
+
+	void updateKeyPress();
 };
 

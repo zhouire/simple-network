@@ -47,6 +47,7 @@ void clientLoop()
     {
         //do game stuff
         client->update();
+		client->updateKeyPress();
 
 		//client2->update();
     }

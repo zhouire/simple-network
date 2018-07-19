@@ -18,6 +18,8 @@ public:
 
 	void sendStringPackets();
 
+	void sendModelUpdate();
+
 private:
 
    // IDs for the clients connecting for table in ServerNetwork 

@@ -14,6 +14,10 @@ enum PacketTypes {
 
 	VECTOR_ADDITION = 3,
 
+	STRING_APPEND = 4,
+
+	MODEL_UPDATE = 5,
+
 };
 
 
@@ -21,6 +25,7 @@ struct Packet {
 
     unsigned int packet_type;
 	int i;
+	std::string * s;
 	Model * m;
 
     void serialize(char * data) {

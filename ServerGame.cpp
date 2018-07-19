@@ -116,6 +116,21 @@ void ServerGame::receiveFromClients()
 					break;
 				}
 
+				case STRING_APPEND:
+				{
+					//std::string s = centralModel->S;
+					//s.append(packet.s->c_str());
+
+					//centralModel->S = s;
+					centralModel->S = *(packet.s);
+
+					printf("server received client keystroke\n");
+
+					sendModelUpdate();
+
+					break;
+				}
+
                 default:
 
                     printf("error in packet types\n");
@@ -142,7 +157,7 @@ void ServerGame::sendActionPackets()
 }
 
 
-
+//fake string packet, just a tester
 void ServerGame::sendStringPackets()
 {
 	const unsigned int packet_size = sizeof(Packet);
@@ -150,6 +165,21 @@ void ServerGame::sendStringPackets()
 
 	Packet packet;
 	packet.packet_type = STRING_PACKET;
+
+	packet.serialize(packet_data);
+
+	network->sendToAll(packet_data, packet_size);
+}
+
+
+void ServerGame::sendModelUpdate()
+{
+	const unsigned int packet_size = sizeof(Packet);
+	char packet_data[packet_size];
+
+	Packet packet;
+	packet.packet_type = MODEL_UPDATE;
+	packet.m = centralModel;
 
 	packet.serialize(packet_data);
 

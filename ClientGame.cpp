@@ -3,14 +3,16 @@
 
 #include <vector>
 
-std::vector<std::string> strDataBase{ (char*)"hello", (char*) "my", (char*) "name" };
+std::vector<std::string> strDataBase{ "hello", "my", "name" };
 std::string strPiece;
 int iter = 0;
 Model * mPiece = new Model();
 
+Model * clientModel = new Model();
+
 ClientGame::ClientGame(void)
 {
-
+	
     network = new ClientNetwork();
 
 	
@@ -68,6 +70,19 @@ void ClientGame::sendStringPackets(Model * m) {
 	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
 }
 
+void ClientGame::addToModelString(std::string * s) {
+	Packet packet;
+	packet.packet_type = STRING_APPEND;
+	packet.s = s;
+
+	const unsigned int packet_size = sizeof(packet);
+	char packet_data[packet_size];
+
+	packet.serialize(packet_data);
+
+	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
+}
+
 //IZ: tester function to add an int to the end of the V vector of a central Model object
 void ClientGame::addToModelVector(int i)
 {
@@ -116,7 +131,7 @@ void ClientGame::update()
 
                 printf("client received action event packet from server\n");
 
-                sendActionPackets();
+                //sendActionPackets();
 				//added
 				//sendStringPackets(mPiece);
 
@@ -131,6 +146,13 @@ void ClientGame::update()
 
 				break;
 
+			case MODEL_UPDATE:
+				clientModel = packet.m;
+
+				printf("%s \n", (clientModel->S).c_str());
+
+				break;
+
             default:
 
                 printf("error in packet types\n");
@@ -138,4 +160,30 @@ void ClientGame::update()
                 break;
         }
     }
+}
+
+void ClientGame::updateKeyPress()
+{
+	std::string * s = new std::string();
+
+	if (GetKeyState('A') & 0x8000/*check if high-order bit is set (1 << 15)*/)
+	{
+		s->assign("after ");
+		//*s = "after ";
+		addToModelString(s);
+	}
+
+	else if (GetKeyState('S') & 0x8000/*check if high-order bit is set (1 << 15)*/)
+	{
+		s->assign("string ");
+		//*s = "string ";
+		addToModelString(s);
+	}
+
+	else if (GetKeyState('D') & 0x8000/*check if high-order bit is set (1 << 15)*/)
+	{
+		s->assign("data ");
+		//*s = "data ";
+		addToModelString(s);
+	}
 }
