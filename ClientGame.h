@@ -4,6 +4,8 @@
 #include "ClientNetwork.h"
 #include "NetworkData.h"
 
+#include "ClientGameMinor.h"
+
 class ClientGame
 {
 public:
@@ -11,6 +13,7 @@ public:
 	~ClientGame(void);
 
 	ClientNetwork* network;
+	ClientGameMinor* m;
 
 	void sendActionPackets();
 

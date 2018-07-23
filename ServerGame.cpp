@@ -77,7 +77,7 @@ void ServerGame::receiveFromClients()
                 case ACTION_EVENT:
 
                     printf("server received action event packet from client\n");
-					sendStringPackets();
+					//sendStringPackets();
 					/*
 					if (client_id % 2 == 1) {
 						sendStringPackets();
@@ -86,6 +86,8 @@ void ServerGame::receiveFromClients()
 						sendActionPackets();
 					}
 					*/
+
+					sendActionPackets();
 					
 
                     break;

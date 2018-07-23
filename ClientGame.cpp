@@ -3,6 +3,7 @@
 
 #include <vector>
 
+
 std::vector<std::string> strDataBase{ "hello", "my", "name" };
 std::string strPiece;
 int iter = 0;
@@ -10,12 +11,12 @@ Model * mPiece = new Model();
 
 Model * clientModel = new Model();
 
+
 ClientGame::ClientGame(void)
 {
 	
     network = new ClientNetwork();
-
-	
+	m = new ClientGameMinor(network);
 
     // send init packet
     const unsigned int packet_size = sizeof(Packet);
@@ -36,6 +37,7 @@ ClientGame::~ClientGame(void)
 
 void ClientGame::sendActionPackets()
 {
+	/*
     // send action packet
     
 	const unsigned int packet_size = sizeof(Packet);
@@ -49,6 +51,9 @@ void ClientGame::sendActionPackets()
     packet.serialize(packet_data);
 
     NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
+	*/
+
+	m->sendGenericPacket();
 }
 
 void ClientGame::sendStringPackets(Model * m) {
@@ -131,7 +136,7 @@ void ClientGame::update()
 
                 printf("client received action event packet from server\n");
 
-                //sendActionPackets();
+                sendActionPackets();
 				//added
 				//sendStringPackets(mPiece);
 
