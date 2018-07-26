@@ -18,37 +18,12 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="ClientGame.cpp" />
-    <ClCompile Include="ClientNetwork.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="NetworkServices.cpp" />
-    <ClCompile Include="ServerGame.cpp" />
-    <ClCompile Include="ServerNetwork.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ClientGame.h" />
-    <ClInclude Include="ClientGameMinor.h" />
-    <ClInclude Include="ClientNetwork.h" />
-    <ClInclude Include="GlobalStructs.h" />
-    <ClInclude Include="NetworkData.h" />
-    <ClInclude Include="NetworkServices.h" />
-    <ClInclude Include="ServerGame.h" />
-    <ClInclude Include="ServerNetwork.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{9EFFB6D9-4EDB-42A5-8BAF-F77C000AA362}</ProjectGuid>
+    <ProjectGuid>{1D93D211-9389-4B70-BBAE-13C48B502A80}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ConsoleApplication1</RootNamespace>
+    <RootNamespace>simpleserver</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
-    <ProjectName>simple-network</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -97,12 +72,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>E:\Classes\2018 Summer\UROP\simple_network\simple_server;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>E:\Classes\2018 Summer\UROP\simple_network\simple_server;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -171,6 +148,32 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="ClientGame.h" />
+    <ClInclude Include="ClientGameMinor.h" />
+    <ClInclude Include="ClientNetwork.h" />
+    <ClInclude Include="GlobalStructs.h" />
+    <ClInclude Include="NetworkData.h" />
+    <ClInclude Include="NetworkServices.h" />
+    <ClInclude Include="ServerGame.h" />
+    <ClInclude Include="ServerNetwork.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ClientGame.cpp" />
+    <ClCompile Include="ClientNetwork.cpp" />
+    <ClCompile Include="NetworkServices.cpp" />
+    <ClCompile Include="ServerGame.cpp" />
+    <ClCompile Include="ServerNetwork.cpp" />
+    <ClCompile Include="simple_server.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -8,10 +8,10 @@
 // used for multi-threading
 #include <process.h>
 
-void serverLoop(void *);
-void clientLoop(void);
+//void serverLoop(void *);
+void clientLoop(void *);
 
-ServerGame * server;
+//ServerGame * server;
 ClientGame * client;
 
 //ClientGame * client2;
@@ -20,19 +20,19 @@ int main()
 {
 
 	// initialize the server
-	server = new ServerGame();
+	//server = new ServerGame();
 
+	client = new ClientGame();
 	// create thread with arbitrary argument for the run function
-    _beginthread( serverLoop, 0, (void*)12);
+    _beginthread( clientLoop, 0, (void*)12);
 
     // initialize the client 
-    client = new ClientGame();
+    //client = new ClientGame();
 
-	//client2 = new ClientGame();
-
-	clientLoop();
+	clientLoop((void*)12);
 }
 
+/*
 void serverLoop(void * arg) 
 { 
     while(true) 
@@ -40,8 +40,9 @@ void serverLoop(void * arg)
         server->update();
     }
 }
+*/
 
-void clientLoop()
+void clientLoop(void * arg)
 {
     while(true)
     {
@@ -52,3 +53,17 @@ void clientLoop()
 		//client2->update();
     }
 }
+
+/*
+void clientLoop()
+{
+	while (true)
+	{
+		//do game stuff
+		client->update();
+		client->updateKeyPress();
+
+		//client2->update();
+	}
+}
+*/
