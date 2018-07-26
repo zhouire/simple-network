@@ -142,9 +142,22 @@ void ServerGame::receiveFromClients()
 					break;
 				}
 
+				case CLIENT_EXIT:
+				{
+					printf("Client %i is disconnecting. Closing the socket.", iter->first);
+
+					closesocket(iter->second);
+					WSACleanup();
+					exit(1);
+
+					break;
+				}
+
                 default:
 
                     printf("error in packet types\n");
+
+					printf("%i\n", (network->sessions).size());
 
                     break;
             }
@@ -196,3 +209,4 @@ void ServerGame::sendModelUpdate()
 
 	network->sendToAll(packet_data, packet_size);
 }
+

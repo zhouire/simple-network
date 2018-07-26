@@ -19,6 +19,9 @@ enum PacketTypes {
 	MODEL_UPDATE = 5,
 
 	FLOAT_PACKET = 6,
+
+	CLIENT_EXIT = 7,
+
 };
 
 

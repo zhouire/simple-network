@@ -10,6 +10,8 @@
 
 //void serverLoop(void *);
 void clientLoop(void *);
+//void clientKeyLoop();
+BOOL WINAPI ClientExitRoutine(_In_ DWORD);
 
 //ServerGame * server;
 ClientGame * client;
@@ -23,6 +25,8 @@ int main()
 	//server = new ServerGame();
 
 	client = new ClientGame();
+
+	SetConsoleCtrlHandler(ClientExitRoutine, true);
 	// create thread with arbitrary argument for the run function
     _beginthread( clientLoop, 0, (void*)12);
 
@@ -53,6 +57,23 @@ void clientLoop(void * arg)
 		//client2->update();
     }
 }
+
+BOOL WINAPI ClientExitRoutine(_In_ DWORD dwCtrlType) {
+	client->sendExitPacket();
+
+	return false;
+}
+
+/*
+void clientKeyLoop()
+{
+	while (true)
+	{
+		client->updateKeyPress();
+	}
+}
+*/
+
 
 /*
 void clientLoop()

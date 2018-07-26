@@ -25,10 +25,14 @@ public:
 
 	void sendFloat(float);
 
+	void sendExitPacket();
+
     char network_data[MAX_PACKET_SIZE];
 
     void update();
 
 	void updateKeyPress();
+
+	BOOL WINAPI ClientExitRoutine(_In_ DWORD);
 };
 

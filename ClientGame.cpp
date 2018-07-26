@@ -18,6 +18,9 @@ ClientGame::ClientGame(void)
     network = new ClientNetwork();
 	m = new ClientGameMinor(network);
 
+	//set console exit actions
+	//SetConsoleCtrlHandler(ClientExitRoutine, true);
+
     // send init packet
     const unsigned int packet_size = sizeof(Packet);
     char packet_data[packet_size];
@@ -117,6 +120,19 @@ void ClientGame::sendFloat(float f)
 	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
 }
 
+void ClientGame::sendExitPacket()
+{
+	Packet packet;
+	packet.packet_type = CLIENT_EXIT;
+
+	const unsigned int packet_size = sizeof(packet);
+	char packet_data[packet_size];
+
+	packet.serialize(packet_data);
+
+	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
+}
+
 void ClientGame::update()
 {
     Packet packet;
@@ -207,4 +223,12 @@ void ClientGame::updateKeyPress()
 		//*s = "data ";
 		addToModelString(s);
 	}
+}
+
+
+
+BOOL WINAPI ClientGame::ClientExitRoutine(_In_ DWORD dwCtrlType) {
+	sendExitPacket();
+
+	return false;
 }
