@@ -145,10 +145,11 @@ void ServerGame::receiveFromClients()
 				case CLIENT_EXIT:
 				{
 					printf("Client %i is disconnecting. Closing the socket.", iter->first);
-
+					
 					closesocket(iter->second);
 					WSACleanup();
-					exit(1);
+					//exit(1);
+					
 
 					break;
 				}
