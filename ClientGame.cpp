@@ -250,14 +250,18 @@ void ClientGame::updateKeyPress()
 	else {
 		a_press = false;
 	}
-	
-	/*
-	if (GetKeyState('S') & 0x8000)
+
+
+	if (GetKeyState('S') & 0x8000/*check if high-order bit is set (1 << 15)*/)
 	{
 		if (!s_press) {
-			s->assign("string ");
-			//*s = "string ";
-			addToModelString(s);
+			//s->assign("after ");
+			//addToModelString(s, 3);
+
+			//sendActionPackets();
+
+			addToModel2Int(2);
+
 			s_press = true;
 		}
 	}
@@ -267,12 +271,16 @@ void ClientGame::updateKeyPress()
 	}
 
 
-	if (GetKeyState('D') & 0x8000)
+	if (GetKeyState('D') & 0x8000/*check if high-order bit is set (1 << 15)*/)
 	{
 		if (!d_press) {
-			s->assign("data ");
-			//*s = "data ";
-			addToModelString(s);
+			//s->assign("after ");
+			//addToModelString(s, 3);
+
+			//sendActionPackets();
+
+			addToModel2Int(3);
+
 			d_press = true;
 		}
 	}
@@ -280,7 +288,6 @@ void ClientGame::updateKeyPress()
 	else {
 		d_press = false;
 	}
-	*/
 }
 
 
