@@ -21,15 +21,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ClientGame.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ClientGameMinor.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ClientNetwork.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="GlobalStructs.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -51,12 +42,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="simple_server.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ClientGame.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ClientNetwork.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="NetworkServices.cpp">

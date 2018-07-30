@@ -149,9 +149,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ClientGame.h" />
-    <ClInclude Include="ClientGameMinor.h" />
-    <ClInclude Include="ClientNetwork.h" />
     <ClInclude Include="GlobalStructs.h" />
     <ClInclude Include="NetworkData.h" />
     <ClInclude Include="NetworkServices.h" />
@@ -161,8 +158,6 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ClientGame.cpp" />
-    <ClCompile Include="ClientNetwork.cpp" />
     <ClCompile Include="NetworkServices.cpp" />
     <ClCompile Include="ServerGame.cpp" />
     <ClCompile Include="ServerNetwork.cpp" />

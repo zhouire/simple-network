@@ -23,8 +23,6 @@
     <ClCompile Include="ClientNetwork.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetworkServices.cpp" />
-    <ClCompile Include="ServerGame.cpp" />
-    <ClCompile Include="ServerNetwork.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -37,8 +35,6 @@
     <ClInclude Include="GlobalStructs.h" />
     <ClInclude Include="NetworkData.h" />
     <ClInclude Include="NetworkServices.h" />
-    <ClInclude Include="ServerGame.h" />
-    <ClInclude Include="ServerNetwork.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>

@@ -3,7 +3,8 @@
 
 
 unsigned int ServerGame::client_id; 
-Model * centralModel = new Model();
+//Model * centralModel = new Model();
+
 
 
 ServerGame::ServerGame(void)
@@ -11,8 +12,17 @@ ServerGame::ServerGame(void)
     // id's to assign clients for our table
     client_id = 0;
 
+	centralModel = new Model();
+	centralModel2 = new Model2;
+
+	centralModel2->C = 'q';
+	centralModel2->I = 0;
+	Part centralPart;
+	centralPart.N = 0;
+	(centralModel2->P) = centralPart;
+
 	//initializes values of centralModel
-	centralModel->S = "hellouniverse";
+	//centralModel->S = "hellouniverse";
 	centralModel->V = std::vector<int>{ 0,1,2,3 };
 
     // set up the server network to listen 
@@ -92,10 +102,11 @@ void ServerGame::receiveFromClients()
 
                     break;
 
+					/*
 				case STRING_PACKET:
 				{
 					int pt = packet.packet_type;
-					//std::string str = *(packet.str);
+					std::string str = *(packet.str);
 					Model * m = packet.m;
 					std::string str = m->S;
 					int v = m->V[pt];
@@ -106,6 +117,7 @@ void ServerGame::receiveFromClients()
 
 					break;
 				}
+				*/
 
 				case VECTOR_ADDITION:
 				{
@@ -117,21 +129,20 @@ void ServerGame::receiveFromClients()
 
 					break;
 				}
-
+				/*
 				case STRING_APPEND:
 				{
-					//std::string s = centralModel->S;
-					//s.append(packet.s->c_str());
+					
+					//centralModel->S = *(packet.s);
+					//centralModel->i = packet.i;
 
-					//centralModel->S = s;
-					centralModel->S = *(packet.s);
-
-					printf("server received client keystroke\n");
+					printf("server received client keystroke %i\n", centralModel->i);
 
 					sendModelUpdate();
 
 					break;
 				}
+				*/
 
 				case FLOAT_PACKET:
 				{
@@ -141,6 +152,20 @@ void ServerGame::receiveFromClients()
 
 					break;
 				}
+
+
+				case MODEL2_ADD:
+				{
+
+					(centralModel2->I) += packet.i;
+					printf("Server got int %i, final value %i \n", packet.i, centralModel2->I);
+
+					sendModel2Update();
+
+					break;
+
+				}
+
 
 				case CLIENT_EXIT:
 				{
@@ -196,7 +221,7 @@ void ServerGame::sendStringPackets()
 	network->sendToAll(packet_data, packet_size);
 }
 
-
+/*
 void ServerGame::sendModelUpdate()
 {
 	const unsigned int packet_size = sizeof(Packet);
@@ -204,10 +229,27 @@ void ServerGame::sendModelUpdate()
 
 	Packet packet;
 	packet.packet_type = MODEL_UPDATE;
-	packet.m = centralModel;
+	packet.m = new Model();
+	*(packet.m) = *centralModel;
+	//packet.m = centralModel;
 
 	packet.serialize(packet_data);
 
 	network->sendToAll(packet_data, packet_size);
 }
+*/
 
+void ServerGame::sendModel2Update()
+{
+	const unsigned int packet_size = sizeof(Packet);
+	char packet_data[packet_size];
+
+	Packet packet;
+	packet.packet_type = MODEL2_UPDATE;
+	packet.m2 = *centralModel2;
+	//packet.m = centralModel;
+
+	packet.serialize(packet_data);
+
+	network->sendToAll(packet_data, packet_size);
+}

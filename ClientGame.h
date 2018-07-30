@@ -14,12 +14,17 @@ public:
 
 	ClientNetwork* network;
 	ClientGameMinor* m;
+	Model * clientModel;
+
+	Model2 * clientModel2;
 
 	void sendActionPackets();
 
 	void sendStringPackets(Model *);
 
-	void addToModelString(std::string *);
+	//void addToModelString(std::string, int);
+
+	void addToModel2Int(int);
 
 	void addToModelVector(int);
 

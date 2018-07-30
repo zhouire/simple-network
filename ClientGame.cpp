@@ -9,7 +9,8 @@ std::string strPiece;
 int iter = 0;
 Model * mPiece = new Model();
 
-Model * clientModel = new Model();
+//Model * clientModel = new Model();
+
 
 
 ClientGame::ClientGame(void)
@@ -17,6 +18,15 @@ ClientGame::ClientGame(void)
 	
     network = new ClientNetwork();
 	m = new ClientGameMinor(network);
+
+	clientModel = new Model();
+	clientModel2 = new Model2;
+
+	clientModel2->C = 'q';
+	clientModel2->I = 0;
+	Part clientPart;
+	clientPart.N = 0;
+	(clientModel2->P) = clientPart;
 
 	//set console exit actions
 	//SetConsoleCtrlHandler(ClientExitRoutine, true);
@@ -40,30 +50,11 @@ ClientGame::~ClientGame(void)
 
 void ClientGame::sendActionPackets()
 {
-	/*
-    // send action packet
-    
-	const unsigned int packet_size = sizeof(Packet);
-	//IZ: This creates an appropriately-sized char array to later fill with the converted pointer
-    char packet_data[packet_size];
-	
-    Packet packet;
-    packet.packet_type = ACTION_EVENT;
-
-	//IZ: I think this actively changes packet_data from source
-    packet.serialize(packet_data);
-
-    NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
-	*/
-
 	m->sendGenericPacket();
 }
 
+/*
 void ClientGame::sendStringPackets(Model * m) {
-	/*
-	const unsigned int packet_size = sizeof(Packet);
-	char packet_data[packet_size];
-	*/
 
 	Packet strPacket;
 	strPacket.packet_type = STRING_PACKET;
@@ -77,11 +68,28 @@ void ClientGame::sendStringPackets(Model * m) {
 
 	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
 }
+*/
 
-void ClientGame::addToModelString(std::string * s) {
+/*
+void ClientGame::addToModelString(std::string * s, int i) {
 	Packet packet;
 	packet.packet_type = STRING_APPEND;
 	packet.s = s;
+	//packet.i = i;
+
+	const unsigned int packet_size = sizeof(packet);
+	char packet_data[packet_size];
+
+	packet.serialize(packet_data);
+
+	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
+}
+*/
+
+void ClientGame::addToModel2Int(int i) {
+	Packet packet;
+	packet.packet_type = MODEL2_ADD;
+	packet.i = i;
 
 	const unsigned int packet_size = sizeof(packet);
 	char packet_data[packet_size];
@@ -139,6 +147,8 @@ void ClientGame::update()
 
     int data_length = network->receivePackets(network_data);
 
+	//mPiece->V = std::vector<int>{ 1,2,3 };
+
     if (data_length <= 0) 
     {
         //no data recieved
@@ -153,8 +163,8 @@ void ClientGame::update()
 		int it = iter % 3;
 		strPiece = strDataBase[it];
 
-		mPiece->S = strPiece;
-		mPiece->V = std::vector<int>{1,2,3};
+		//mPiece->S = strPiece;
+		//mPiece->V = std::vector<int>{ 1,2,3 };
 
 		
 		packet.deserialize(&(network_data[i]));
@@ -182,13 +192,29 @@ void ClientGame::update()
 				addToModelVector(iter);
 
 				break;
-
+				/*
 			case MODEL_UPDATE:
-				clientModel = packet.m;
+				//*clientModel = *(packet.m);
+				clientModel->i = packet.m->i;
+				clientModel->S = packet.m->S;
+				clientModel->V = packet.m->V;
 
-				printf("%s \n", (clientModel->S).c_str());
+				//printf("%s \n", (clientModel->S).c_str());
+				printf("%i \n", (clientModel->i));
+				//printf("%i \n", (2));
+				break;
+				*/
+
+			case MODEL2_UPDATE:
+			{
+				clientModel2->C = (packet.m2).C;
+				clientModel2->I = (packet.m2).I;
+				clientModel2->P = (packet.m2).P;
+
+				printf("Model2 updated with char %c, int %i, Part %i \n", clientModel2->C, clientModel2->I, (clientModel2->P).N);
 
 				break;
+			}
 
             default:
 
@@ -201,28 +227,60 @@ void ClientGame::update()
 
 void ClientGame::updateKeyPress()
 {
-	std::string * s = new std::string();
+	//std::string * s = new std::string;
+
+	static bool a_press = false;
+	static bool s_press = false;
+	static bool d_press = false;
 
 	if (GetKeyState('A') & 0x8000/*check if high-order bit is set (1 << 15)*/)
 	{
-		s->assign("after ");
-		//*s = "after ";
-		addToModelString(s);
+		if (!a_press) {
+			//s->assign("after ");
+			//addToModelString(s, 3);
+			
+			//sendActionPackets();
+			
+			addToModel2Int(1);
+
+			a_press = true;
+		}
 	}
 
-	else if (GetKeyState('S') & 0x8000/*check if high-order bit is set (1 << 15)*/)
+	else {
+		a_press = false;
+	}
+	
+	/*
+	if (GetKeyState('S') & 0x8000)
 	{
-		s->assign("string ");
-		//*s = "string ";
-		addToModelString(s);
+		if (!s_press) {
+			s->assign("string ");
+			//*s = "string ";
+			addToModelString(s);
+			s_press = true;
+		}
 	}
 
-	else if (GetKeyState('D') & 0x8000/*check if high-order bit is set (1 << 15)*/)
-	{
-		s->assign("data ");
-		//*s = "data ";
-		addToModelString(s);
+	else {
+		s_press = false;
 	}
+
+
+	if (GetKeyState('D') & 0x8000)
+	{
+		if (!d_press) {
+			s->assign("data ");
+			//*s = "data ";
+			addToModelString(s);
+			d_press = true;
+		}
+	}
+
+	else {
+		d_press = false;
+	}
+	*/
 }
 
 

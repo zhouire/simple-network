@@ -22,6 +22,10 @@ enum PacketTypes {
 
 	CLIENT_EXIT = 7,
 
+	MODEL2_ADD = 8,
+
+	MODEL2_UPDATE = 9,
+
 };
 
 
@@ -30,8 +34,14 @@ struct Packet {
     unsigned int packet_type;
 	int i;
 	float f;
-	std::string * s;
-	Model * m;
+	//std::string * s;
+	//Model * m;
+
+	//std::string
+	char c;
+
+	Model2 m2;
+
 
     void serialize(char * data) {
         memcpy(data, this, sizeof(Packet));

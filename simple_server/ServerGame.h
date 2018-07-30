@@ -18,12 +18,17 @@ public:
 
 	void sendStringPackets();
 
-	void sendModelUpdate();
+	//void sendModelUpdate();
+
+	void sendModel2Update();
 
 private:
 
    // IDs for the clients connecting for table in ServerNetwork 
     static unsigned int client_id;
+
+	Model * centralModel;
+	Model2 * centralModel2;
 
    // The ServerNetwork object 
     ServerNetwork* network;
