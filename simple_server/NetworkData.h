@@ -26,6 +26,10 @@ enum PacketTypes {
 
 	MODEL2_UPDATE = 9,
 
+	ADD_TO_MODEL_PART = 10,
+	
+	CHANGE_MODEL_STRING = 11,
+
 };
 
 
@@ -36,19 +40,31 @@ struct Packet {
 	float f;
 	//std::string * s;
 	//Model * m;
+	Model m;
 
-	//std::string
+	std::string s;
 	char c;
 
 	Model2 m2;
 
-
+	/*
 	void serialize(char * data) {
 		memcpy(data, this, sizeof(Packet));
 	}
 
 	void deserialize(char * data) {
 		memcpy(this, data, sizeof(Packet));
+	}
+	*/
+
+//private:
+	friend class boost::serialization::access;
+	// When the class Archive corresponds to an output archive, the
+	// & operator is defined similar to <<.  Likewise, when the class Archive
+	// is a type of input archive the & operator is defined similar to >>.
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & packet_type & i & f & m & s & c & m2;
 	}
 };
 

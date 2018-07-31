@@ -71,7 +71,8 @@ void ServerGame::receiveFromClients()
             /*packet.deserialize(&(network_data[i]));
             i += sizeof(Packet);*/
 
-			packet.deserialize(&(network_data[i]));
+			//packet.deserialize(&(network_data[i]));
+			packet = deserializeToPacket(&(network_data[i]), sizeof(Packet));
 			i += sizeof(Packet);
 
             switch (packet.packet_type) {
@@ -166,6 +167,30 @@ void ServerGame::receiveFromClients()
 
 				}
 
+				case ADD_TO_MODEL_PART:
+				{
+
+					(centralModel->P)->N += packet.i;
+					printf("Server received int %i, Model Part int %i \n", packet.i, (centralModel->P)->N);
+
+					sendModelUpdate();
+
+					break;
+
+				}
+
+				case CHANGE_MODEL_STRING:
+				{
+
+					*(centralModel->S) = packet.s;
+					printf("Server received string %s, Model string now %s \n", (packet.s).c_str(), (centralModel->S)->c_str());
+
+					sendModelUpdate();
+
+					break;
+
+				}
+
 
 				case CLIENT_EXIT:
 				{
@@ -191,7 +216,7 @@ void ServerGame::receiveFromClients()
     }
 }
 
-
+/*
 void ServerGame::sendActionPackets()
 {
     // send action packet
@@ -205,8 +230,51 @@ void ServerGame::sendActionPackets()
 
     network->sendToAll(packet_data,packet_size);
 }
+*/
+
+char * ServerGame::serializeToChar(Packet packet) 
+{
+	// serialize obj into an std::string
+	std::string serial_str;
+	boost::iostreams::back_insert_device<std::string> inserter(serial_str);
+	boost::iostreams::stream<boost::iostreams::back_insert_device<std::string> > s(inserter);
+	boost::archive::binary_oarchive oa(s);
+
+	oa << packet; //serializable object
+
+	// don't forget to flush the stream to finish writing into the buffer
+	s.flush();
+
+	return (char*)(serial_str.data());
+}
+
+Packet ServerGame::deserializeToPacket(char * buffer, int buflen)
+{
+	Packet packet;
+	// wrap buffer inside a stream and deserialize serial_str into obj
+	boost::iostreams::basic_array_source<char> device(buffer, buflen);
+	boost::iostreams::stream<boost::iostreams::basic_array_source<char> > s(device);
+	boost::archive::binary_iarchive ia(s);
+	ia >> packet;
+
+	return packet;
+}
 
 
+void ServerGame::sendActionPackets()
+{
+	Packet packet;
+	packet.packet_type = ACTION_EVENT;
+
+	const unsigned int packet_size = sizeof(Packet);
+
+	char * packet_data = serializeToChar(packet);
+
+	network->sendToAll(packet_data, packet_size);
+}
+
+
+/*
 //fake string packet, just a tester
 void ServerGame::sendStringPackets()
 {
@@ -220,6 +288,7 @@ void ServerGame::sendStringPackets()
 
 	network->sendToAll(packet_data, packet_size);
 }
+*/
 
 /*
 void ServerGame::sendModelUpdate()
@@ -239,6 +308,32 @@ void ServerGame::sendModelUpdate()
 }
 */
 
+void ServerGame::sendModelUpdate()
+{
+	Packet packet;
+	packet.packet_type = MODEL_UPDATE;
+	packet.m = *centralModel;
+
+	const unsigned int packet_size = sizeof(Packet);
+
+	// serialize obj into an std::string
+	std::string serial_str;
+	boost::iostreams::back_insert_device<std::string> inserter(serial_str);
+	boost::iostreams::stream<boost::iostreams::back_insert_device<std::string> > s(inserter);
+	boost::archive::binary_oarchive oa(s);
+
+	oa << packet; //serializable object
+
+	// don't forget to flush the stream to finish writing into the buffer
+	s.flush();
+
+	// now you get to const char* with serial_str.data() or serial_str.c_str()
+	char * packet_data = (char*) serial_str.data();
+
+	network->sendToAll(packet_data, packet_size);
+}
+
+/*
 void ServerGame::sendModel2Update()
 {
 	const unsigned int packet_size = sizeof(Packet);
@@ -253,3 +348,21 @@ void ServerGame::sendModel2Update()
 
 	network->sendToAll(packet_data, packet_size);
 }
+*/
+
+void ServerGame::sendModel2Update()
+{
+	const unsigned int packet_size = sizeof(Packet);
+	//char packet_data[packet_size];
+
+	Packet packet;
+	packet.packet_type = MODEL2_UPDATE;
+	packet.m2 = *centralModel2;
+
+	//packet.serialize(packet_data);
+	char * packet_data = serializeToChar(packet);
+
+	network->sendToAll(packet_data, packet_size);
+}
+
+

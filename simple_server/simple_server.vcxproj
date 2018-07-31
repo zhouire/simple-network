@@ -72,14 +72,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\Classes\2018 Summer\UROP\simple_network\simple_server;$(IncludePath)</IncludePath>
+    <IncludePath>E:\Classes\2018 Summer\UROP\simple_network;E:\Classes\2018 Summer\UROP\simple_network\simple_server;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>E:\Classes\2018 Summer\UROP\simple_network\simple_server;$(IncludePath)</IncludePath>
+    <IncludePath>E:\Classes\2018 Summer\UROP\simple_network;E:\Classes\2018 Summer\UROP\simple_network\simple_server;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

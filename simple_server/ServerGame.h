@@ -18,9 +18,13 @@ public:
 
 	void sendStringPackets();
 
-	//void sendModelUpdate();
+	void sendModelUpdate();
 
 	void sendModel2Update();
+
+	char * serializeToChar(Packet);
+
+	Packet deserializeToPacket(char *, int);
 
 private:
 

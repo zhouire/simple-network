@@ -30,6 +30,10 @@ public:
 
 	void sendFloat(float);
 
+	void addToModelPart(int);
+
+	void changeModelString(std::string);
+
 	void sendExitPacket();
 
     char network_data[MAX_PACKET_SIZE];
@@ -39,5 +43,9 @@ public:
 	void updateKeyPress();
 
 	BOOL WINAPI ClientExitRoutine(_In_ DWORD);
+
+	char * serializeToChar(Packet);
+	
+	Packet deserializeToPacket(char *, int);
 };
 
