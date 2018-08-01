@@ -32,7 +32,7 @@ ServerNetwork::ServerNetwork(void)
     hints.ai_flags = AI_PASSIVE;
 
 	    // Resolve the server address and port
-    iResult = getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
+    iResult = ::getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
 
     if ( iResult != 0 ) {
         printf("getaddrinfo failed with error: %d\n", iResult);
@@ -45,42 +45,42 @@ ServerNetwork::ServerNetwork(void)
 
     if (ListenSocket == INVALID_SOCKET) {
         printf("socket failed with error: %ld\n", WSAGetLastError());
-        freeaddrinfo(result);
+        ::freeaddrinfo(result);
         WSACleanup();
         exit(1);
     }
 
     // Set the mode of the socket to be nonblocking
     u_long iMode = 1;
-    iResult = ioctlsocket(ListenSocket, FIONBIO, &iMode);
+    iResult = ::ioctlsocket(ListenSocket, FIONBIO, &iMode);
 
     if (iResult == SOCKET_ERROR) {
         printf("ioctlsocket failed with error: %d\n", WSAGetLastError());
-        closesocket(ListenSocket);
+        ::closesocket(ListenSocket);
         WSACleanup();
         exit(1);
     }
 
     // Setup the TCP listening socket
-    iResult = bind( ListenSocket, result->ai_addr, (int)result->ai_addrlen);
+    iResult = ::bind( ListenSocket, result->ai_addr, (int)result->ai_addrlen);
 
     if (iResult == SOCKET_ERROR) {
         printf("bind failed with error: %d\n", WSAGetLastError());
-        freeaddrinfo(result);
-        closesocket(ListenSocket);
+        ::freeaddrinfo(result);
+        ::closesocket(ListenSocket);
         WSACleanup();
         exit(1);
     }
 
     // no longer need address information
-    freeaddrinfo(result);
+    ::freeaddrinfo(result);
 
     // start listening for new clients attempting to connect
-    iResult = listen(ListenSocket, SOMAXCONN);
+    iResult = ::listen(ListenSocket, SOMAXCONN);
 
     if (iResult == SOCKET_ERROR) {
         printf("listen failed with error: %d\n", WSAGetLastError());
-        closesocket(ListenSocket);
+        ::closesocket(ListenSocket);
         WSACleanup();
         exit(1);
     }
@@ -95,13 +95,13 @@ ServerNetwork::~ServerNetwork(void)
 bool ServerNetwork::acceptNewClient(unsigned int & id)
 {
     // if client waiting, accept the connection and save the socket
-    ClientSocket = accept(ListenSocket,NULL,NULL);
+    ClientSocket = ::accept(ListenSocket,NULL,NULL);
 
     if (ClientSocket != INVALID_SOCKET) 
     {
         //disable nagle on the client's socket
         char value = 1;
-        setsockopt( ClientSocket, IPPROTO_TCP, TCP_NODELAY, &value, sizeof( value ) );
+        ::setsockopt( ClientSocket, IPPROTO_TCP, TCP_NODELAY, &value, sizeof( value ) );
 
         // insert new client into session id table
         sessions.insert( pair<unsigned int, SOCKET>(id, ClientSocket) );
@@ -123,7 +123,7 @@ int ServerNetwork::receiveData(unsigned int client_id, char * recvbuf)
         if (iResult == 0)
         {
             printf("Connection closed\n");
-            closesocket(currentSocket);
+            ::closesocket(currentSocket);
         }
 
         return iResult;
@@ -147,7 +147,7 @@ void ServerNetwork::sendToAll(char * packets, int totalSize)
         if (iSendResult == SOCKET_ERROR) 
         {
             printf("send failed with error: %d\n", WSAGetLastError());
-            closesocket(currentSocket);
+            ::closesocket(currentSocket);
         }
     }
 }

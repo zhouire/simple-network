@@ -32,15 +32,21 @@ ClientGame::ClientGame(void)
 	//SetConsoleCtrlHandler(ClientExitRoutine, true);
 
     // send init packet
-    const unsigned int packet_size = sizeof(Packet);
+    //const unsigned int packet_size = sizeof(Packet);
     //char packet_data[packet_size];
 
     Packet packet;
     packet.packet_type = INIT_CONNECTION;
 
     //packet.serialize(packet_data);
-	char * packet_data = serializeToChar(packet);
+	//char * packet_data = serializeToChar(packet);
 
+	std::string buffer = serializeToChar(packet);
+	char * packet_data = (char*)(buffer.data());
+	const unsigned int packet_size = buffer.size() + 1;
+	//const unsigned int packet_size = sizeof(buffer);
+
+	sendSizeData(packet_size);
     NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
 }
 
@@ -49,7 +55,7 @@ ClientGame::~ClientGame(void)
 {
 }
 
-char * ClientGame::serializeToChar(Packet packet)
+std::string ClientGame::serializeToChar(Packet packet)
 {
 	// serialize obj into an std::string
 	std::string serial_str;
@@ -57,12 +63,14 @@ char * ClientGame::serializeToChar(Packet packet)
 	boost::iostreams::stream<boost::iostreams::back_insert_device<std::string> > s(inserter);
 	boost::archive::binary_oarchive oa(s);
 
-	oa << packet; //serializable object
+	//oa << packet; //serializable object
+	oa & packet;
 
-				  // don't forget to flush the stream to finish writing into the buffer
+	// don't forget to flush the stream to finish writing into the buffer
 	s.flush();
 
-	return (char*)(serial_str.data());
+	//return (char*)(serial_str.data());
+	return serial_str;
 }
 
 Packet ClientGame::deserializeToPacket(char * buffer, int buflen)
@@ -72,10 +80,24 @@ Packet ClientGame::deserializeToPacket(char * buffer, int buflen)
 	boost::iostreams::basic_array_source<char> device(buffer, buflen);
 	boost::iostreams::stream<boost::iostreams::basic_array_source<char> > s(device);
 	boost::archive::binary_iarchive ia(s);
-	ia >> packet;
+	//ia >> packet;
+	ia & packet;
 
 	return packet;
 }
+
+void ClientGame::sendSizeData(int packet_size) {
+	Size s;
+	s.size = packet_size;
+
+	const unsigned int s_size = sizeof(Size);
+	char s_data[s_size];
+
+	s.serialize(s_data);
+
+	NetworkServices::sendMessage(network->ConnectSocket, s_data, s_size);
+}
+
 
 void ClientGame::sendActionPackets()
 {
@@ -120,12 +142,12 @@ void ClientGame::addToModel2Int(int i) {
 	packet.packet_type = MODEL2_ADD;
 	packet.i = i;
 
-	const unsigned int packet_size = sizeof(packet);
-	//char packet_data[packet_size];
+	std::string buffer = serializeToChar(packet);
+	char * packet_data = (char*)(buffer.data());
+	//const unsigned int packet_size = sizeof(buffer);
+	const unsigned int packet_size = buffer.size() + 1;
 
-	//packet.serialize(packet_data);
-	char * packet_data = serializeToChar(packet);
-
+	sendSizeData(packet_size);
 	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
 }
 
@@ -152,12 +174,12 @@ void ClientGame::sendFloat(float f)
 	packet.packet_type = FLOAT_PACKET;
 	packet.f = f;
 
-	const unsigned int packet_size = sizeof(packet);
-	//char packet_data[packet_size];
+	std::string buffer = serializeToChar(packet);
+	char * packet_data = (char*)(buffer.data());
+	const unsigned int packet_size = buffer.size() + 1;
+	//const unsigned int packet_size = sizeof(buffer);
 
-	//packet.serialize(packet_data);
-	char * packet_data = serializeToChar(packet);
-
+	sendSizeData(packet_size);
 	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
 }
 
@@ -168,10 +190,12 @@ void ClientGame::addToModelPart(int i)
 	packet.packet_type = ADD_TO_MODEL_PART;
 	packet.i = i;
 
-	const unsigned int packet_size = sizeof(packet);
+	std::string buffer = serializeToChar(packet);
+	char * packet_data = (char*)(buffer.data());
+	const unsigned int packet_size = buffer.size() + 1;
+	//const unsigned int packet_size = sizeof(buffer);
 
-	char * packet_data = serializeToChar(packet);
-
+	sendSizeData(packet_size);
 	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
 }
 
@@ -182,10 +206,12 @@ void ClientGame::changeModelString(std::string str)
 	packet.packet_type = CHANGE_MODEL_STRING;
 	packet.s = str;
 
-	const unsigned int packet_size = sizeof(packet);
+	std::string buffer = serializeToChar(packet);
+	char * packet_data = (char*)(buffer.data());
+	const unsigned int packet_size = buffer.size() + 1;
+	//const unsigned int packet_size = sizeof(buffer);
 
-	char * packet_data = serializeToChar(packet);
-
+	sendSizeData(packet_size);
 	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
 }
 
@@ -195,12 +221,12 @@ void ClientGame::sendExitPacket()
 	Packet packet;
 	packet.packet_type = CLIENT_EXIT;
 
-	const unsigned int packet_size = sizeof(packet);
-	//char packet_data[packet_size];
+	std::string buffer = serializeToChar(packet);
+	char * packet_data = (char*)(buffer.data());
+	const unsigned int packet_size = buffer.size() + 1;
+	//const unsigned int packet_size = sizeof(buffer);
 
-	//packet.serialize(packet_data);
-	char * packet_data = serializeToChar(packet);
-
+	sendSizeData(packet_size);
 	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
 }
 
@@ -219,6 +245,7 @@ void ClientGame::update()
     }
 
     int i = 0;
+
     while (i < (unsigned int)data_length) 
     {
 		//added this part for testing
@@ -249,6 +276,7 @@ void ClientGame::update()
 
                 break;
 
+				/*
 			case STRING_PACKET:
 
 				printf("client got stringpacket\n");
@@ -257,6 +285,8 @@ void ClientGame::update()
 				addToModelVector(iter);
 
 				break;
+				*/
+
 				/*
 			case MODEL_UPDATE:
 				//*clientModel = *(packet.m);
@@ -285,7 +315,7 @@ void ClientGame::update()
 			{
 				*clientModel = packet.m;
 
-				printf("Model updated with Part %i, string %s \n", (clientModel->P)->N, (clientModel->S)->c_str());
+				printf("Model updated with Part %i, string %s \n", (clientModel->P)->N, (clientModel->S).c_str());
 
 				break;
 			}

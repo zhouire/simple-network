@@ -44,8 +44,12 @@ public:
 
 	BOOL WINAPI ClientExitRoutine(_In_ DWORD);
 
-	char * serializeToChar(Packet);
+	//char * serializeToChar(Packet);
+
+	std::string serializeToChar(Packet);
 	
 	Packet deserializeToPacket(char *, int);
+
+	void sendSizeData(int);
 };
 

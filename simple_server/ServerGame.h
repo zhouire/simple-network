@@ -22,9 +22,12 @@ public:
 
 	void sendModel2Update();
 
-	char * serializeToChar(Packet);
+	//char * serializeToChar(Packet);
+	std::string serializeToChar(Packet);
 
 	Packet deserializeToPacket(char *, int);
+
+	void sendSizeData(int);
 
 private:
 

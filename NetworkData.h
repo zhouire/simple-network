@@ -27,13 +27,28 @@ enum PacketTypes {
 	MODEL2_UPDATE = 9,
 
 	ADD_TO_MODEL_PART = 10,
-	
+
 	CHANGE_MODEL_STRING = 11,
 
 };
 
+//this is a small segment sent before each Packet, defining the Packet's size for deserialization
+struct Size {
+	int size;
+
+	void serialize(char * data) {
+		memcpy(data, this, sizeof(Size));
+	}
+
+	void deserialize(char * data) {
+		memcpy(this, data, sizeof(Size));
+	}
+};
+
 
 struct Packet {
+
+	Packet() {}
 
 	unsigned int packet_type;
 	int i;
@@ -49,22 +64,29 @@ struct Packet {
 
 	/*
 	void serialize(char * data) {
-		memcpy(data, this, sizeof(Packet));
+	memcpy(data, this, sizeof(Packet));
 	}
 
 	void deserialize(char * data) {
-		memcpy(this, data, sizeof(Packet));
+	memcpy(this, data, sizeof(Packet));
 	}
 	*/
 
-//private:
+	//private:
 	friend class boost::serialization::access;
 	// When the class Archive corresponds to an output archive, the
 	// & operator is defined similar to <<.  Likewise, when the class Archive
 	// is a type of input archive the & operator is defined similar to >>.
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
-		ar & packet_type & i & f & m & s & c & m2;
+		//ar & packet_type & i & f & m & s & c & m2;
+		ar & packet_type;
+		ar & i;
+		ar & f;
+		ar & m;
+		ar & s;
+		ar & c;
+		ar & m2;
 	}
 };
 

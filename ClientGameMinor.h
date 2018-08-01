@@ -28,7 +28,7 @@ struct ClientGameMinor
 	}
 	*/
 
-	char * serializeToChar(Packet packet)
+	std::string serializeToChar(Packet packet)
 	{
 		// serialize obj into an std::string
 		std::string serial_str;
@@ -36,13 +36,29 @@ struct ClientGameMinor
 		boost::iostreams::stream<boost::iostreams::back_insert_device<std::string> > s(inserter);
 		boost::archive::binary_oarchive oa(s);
 
-		oa << packet; //serializable object
+		//oa << packet; //serializable object
+		oa & packet;
 
-					  // don't forget to flush the stream to finish writing into the buffer
+		// don't forget to flush the stream to finish writing into the buffer
 		s.flush();
 
-		return (char*)(serial_str.data());
+		//return (char*)(serial_str.data());
+		return serial_str;
 	}
+
+
+	void sendSizeData(int packet_size) {
+		Size s;
+		s.size = packet_size;
+
+		const unsigned int s_size = sizeof(Size);
+		char s_data[s_size];
+
+		s.serialize(s_data);
+
+		NetworkServices::sendMessage(network1->ConnectSocket, s_data, s_size);
+	}
+
 
 	void sendGenericPacket()
 	{
@@ -51,10 +67,12 @@ struct ClientGameMinor
 		Packet packet;
 		packet.packet_type = ACTION_EVENT;
 
-		const unsigned int packet_size = sizeof(Packet);
+		std::string buffer = serializeToChar(packet);
+		char * packet_data = (char*)(buffer.data());
+		const unsigned int packet_size = buffer.size() + 1;
+		//const unsigned int packet_size = sizeof(buffer);
 
-		char * packet_data = serializeToChar(packet);
-
+		sendSizeData(packet_size);
 		NetworkServices::sendMessage(network1->ConnectSocket, packet_data, packet_size);
 	}
 };

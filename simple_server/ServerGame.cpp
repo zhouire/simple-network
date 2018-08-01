@@ -68,8 +68,6 @@ void ServerGame::receiveFromClients()
         int i = 0;
         while (i < (unsigned int)data_length) 
         {
-            /*packet.deserialize(&(network_data[i]));
-            i += sizeof(Packet);*/
 
 			//packet.deserialize(&(network_data[i]));
 			packet = deserializeToPacket(&(network_data[i]), sizeof(Packet));
@@ -182,8 +180,8 @@ void ServerGame::receiveFromClients()
 				case CHANGE_MODEL_STRING:
 				{
 
-					*(centralModel->S) = packet.s;
-					printf("Server received string %s, Model string now %s \n", (packet.s).c_str(), (centralModel->S)->c_str());
+					centralModel->S = packet.s;
+					printf("Server received string %s, Model string now %s \n", (packet.s).c_str(), (centralModel->S).c_str());
 
 					sendModelUpdate();
 
@@ -232,7 +230,7 @@ void ServerGame::sendActionPackets()
 }
 */
 
-char * ServerGame::serializeToChar(Packet packet) 
+std::string ServerGame::serializeToChar(Packet packet) 
 {
 	// serialize obj into an std::string
 	std::string serial_str;
@@ -240,12 +238,14 @@ char * ServerGame::serializeToChar(Packet packet)
 	boost::iostreams::stream<boost::iostreams::back_insert_device<std::string> > s(inserter);
 	boost::archive::binary_oarchive oa(s);
 
-	oa << packet; //serializable object
+	//oa << packet; //serializable object
+	oa & packet;
 
 	// don't forget to flush the stream to finish writing into the buffer
 	s.flush();
 
-	return (char*)(serial_str.data());
+	//return (char*)(serial_str.data());
+	return serial_str;
 }
 
 Packet ServerGame::deserializeToPacket(char * buffer, int buflen)
@@ -255,9 +255,22 @@ Packet ServerGame::deserializeToPacket(char * buffer, int buflen)
 	boost::iostreams::basic_array_source<char> device(buffer, buflen);
 	boost::iostreams::stream<boost::iostreams::basic_array_source<char> > s(device);
 	boost::archive::binary_iarchive ia(s);
-	ia >> packet;
+	//ia >> packet;
+	ia & packet;
 
 	return packet;
+}
+
+void ServerGame::sendSizeData(int packet_size) {
+	Size s;
+	s.size = packet_size;
+
+	const unsigned int s_size = sizeof(Size);
+	char s_data[s_size];
+
+	s.serialize(s_data);
+
+	network->sendToAll(s_data, s_size);
 }
 
 
@@ -266,10 +279,15 @@ void ServerGame::sendActionPackets()
 	Packet packet;
 	packet.packet_type = ACTION_EVENT;
 
-	const unsigned int packet_size = sizeof(Packet);
+	//const unsigned int packet_size = sizeof(Packet);
 
-	char * packet_data = serializeToChar(packet);
+	//char * packet_data = serializeToChar(packet);
+	std::string buffer = serializeToChar(packet);
+	char * packet_data = (char*)(buffer.data());
+	//const unsigned int packet_size = buffer.length() + 1;
+	const unsigned int packet_size = sizeof(buffer);
 
+	sendSizeData(packet_size);
 	network->sendToAll(packet_data, packet_size);
 }
 
@@ -314,22 +332,16 @@ void ServerGame::sendModelUpdate()
 	packet.packet_type = MODEL_UPDATE;
 	packet.m = *centralModel;
 
-	const unsigned int packet_size = sizeof(Packet);
+	//const unsigned int packet_size = sizeof(Packet);
 
-	// serialize obj into an std::string
-	std::string serial_str;
-	boost::iostreams::back_insert_device<std::string> inserter(serial_str);
-	boost::iostreams::stream<boost::iostreams::back_insert_device<std::string> > s(inserter);
-	boost::archive::binary_oarchive oa(s);
+	//char * packet_data = serializeToChar(packet);
 
-	oa << packet; //serializable object
+	std::string buffer = serializeToChar(packet);
+	char * packet_data = (char*)(buffer.data());
+	const unsigned int packet_size = buffer.size() + 1;
+	//const unsigned int packet_size = sizeof(buffer);
 
-	// don't forget to flush the stream to finish writing into the buffer
-	s.flush();
-
-	// now you get to const char* with serial_str.data() or serial_str.c_str()
-	char * packet_data = (char*) serial_str.data();
-
+	sendSizeData(packet_size);
 	network->sendToAll(packet_data, packet_size);
 }
 
@@ -352,7 +364,7 @@ void ServerGame::sendModel2Update()
 
 void ServerGame::sendModel2Update()
 {
-	const unsigned int packet_size = sizeof(Packet);
+	//const unsigned int packet_size = sizeof(Packet);
 	//char packet_data[packet_size];
 
 	Packet packet;
@@ -360,8 +372,14 @@ void ServerGame::sendModel2Update()
 	packet.m2 = *centralModel2;
 
 	//packet.serialize(packet_data);
-	char * packet_data = serializeToChar(packet);
+	//char * packet_data = serializeToChar(packet);
 
+	std::string buffer = serializeToChar(packet);
+	char * packet_data = (char*)(buffer.data());
+	const unsigned int packet_size = buffer.size() + 1;
+	//const unsigned int packet_size = sizeof(buffer);
+
+	sendSizeData(packet_size);
 	network->sendToAll(packet_data, packet_size);
 }
 

@@ -32,8 +32,23 @@ enum PacketTypes {
 
 };
 
+//this is a small segment sent before each Packet, defining the Packet's size for deserialization
+struct Size {
+	int size;
+
+	void serialize(char * data) {
+		memcpy(data, this, sizeof(Size));
+	}
+
+	void deserialize(char * data) {
+		memcpy(this, data, sizeof(Size));
+	}
+};
+
 
 struct Packet {
+
+	Packet() {}
 
 	unsigned int packet_type;
 	int i;
@@ -64,7 +79,14 @@ struct Packet {
 	// is a type of input archive the & operator is defined similar to >>.
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
-		ar & packet_type & i & f & m & s & c & m2;
+		//ar & packet_type & i & f & m & s & c & m2;
+		ar & packet_type;
+		ar & i;
+		ar & f;
+		ar & m;
+		ar & s;
+		ar & c;
+		ar & m2;
 	}
 };
 
