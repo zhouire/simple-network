@@ -63,6 +63,7 @@ ClientGame::~ClientGame(void)
 {
 }
 
+
 std::string ClientGame::serializeToChar(Packet &packet)
 {
 	/*
@@ -342,8 +343,10 @@ void ClientGame::update()
 				size.deserialize((char*)(tempBuf.data()));
 				nextDataSize = size.size;
 				curPacket = !curPacket;
-				tempBuf.clear();
+				
 				i += (sizeof(Size) - tempBuf.size());
+
+				tempBuf.clear();
 			}
 			//no matter what, we skip the rest of the loop if the current data is of Size type
 			continue;
@@ -365,8 +368,10 @@ void ClientGame::update()
 				tempBuf.append(&(network_data[i]), (nextDataSize - tempBuf.size()));
 				packet = deserializeToPacket((char*)(tempBuf.data()), nextDataSize);
 				curPacket = !curPacket;
-				tempBuf.clear();
+				
 				i += (nextDataSize - tempBuf.size());
+
+				tempBuf.clear();
 			}
 		}
 

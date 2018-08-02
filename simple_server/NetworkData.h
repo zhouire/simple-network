@@ -2,7 +2,7 @@
 #include <string.h>
 #include <string>
 
-#define MAX_PACKET_SIZE 1000000
+#define MAX_PACKET_SIZE 10000000
 
 enum PacketTypes {
 
@@ -34,6 +34,8 @@ enum PacketTypes {
 
 //this is a small segment sent before each Packet, defining the Packet's size for deserialization
 struct Size {
+	Size(){}
+
 	int size;
 
 	void serialize(char * data) {

@@ -20,7 +20,7 @@ struct Model {
 	Model()
 	{}
 
-	Part * P;
+	Part * P = new Part();
 	//std::string * S;
 	std::string S;
 	std::vector<int> V;
