@@ -18,6 +18,12 @@ public:
 
 	Model2 * clientModel2;
 
+	bool curPacket;
+	//char tempBuf[MAX_PACKET_SIZE];
+	std::string tempBuf;
+	int nextDataSize;
+
+
 	void sendActionPackets();
 
 	void sendStringPackets(Model *);

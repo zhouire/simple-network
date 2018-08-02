@@ -42,4 +42,9 @@ private:
 
 	// data buffer
    char network_data[MAX_PACKET_SIZE];
+
+   //just for keeping track of data received from the stream
+   bool * curPacket;
+   std::vector<std::string> tempBuf;
+   int * nextDataSize;
 };
