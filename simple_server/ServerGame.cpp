@@ -75,13 +75,15 @@ void ServerGame::receiveFromClients()
         while (i < (unsigned int)data_length) 
         {
 			//this part deals with receiving data of varying sizes
-
+			
 			if (!curPacket) {
+				printf("SIZEEE");
 				//if the remaining data + data in tempBuf < enough data to construct Size object
 				//just add the remaining data to the tempBuf, increment i, skip rest of loop
 				if ((data_length - i - 1 + tempBuf.size()) < sizeof(Size)) {
 					//just append the rest of the data, add to i, and skip everything else
-					tempBuf[client_id].append(&(network_data[i]));
+					//tempBuf[client_id].append(&(network_data[i]));
+					tempBuf[iter->first].append(&(network_data[i]));
 					//add enough to overflow the while condition
 					i += sizeof(Size);
 				}
@@ -91,7 +93,8 @@ void ServerGame::receiveFromClients()
 				//nextDataSize, clear tempBuf (because we have already deserialized), increment i, flip the 
 				//curPacket switch (because we constructed a full object), and skip rest of loop
 				else {
-					tempBuf[client_id].append(&(network_data[i]), (sizeof(Size) - tempBuf.size()));
+					//tempBuf[client_id].append(&(network_data[i]), (sizeof(Size) - tempBuf.size()));
+					tempBuf[iter->first].append(&(network_data[i]), (sizeof(Size) - tempBuf.size()));
 					size.deserialize((char*)(tempBuf.data()));
 					nextDataSize[iter->first] = size.size;
 					curPacket[iter->first] = !(curPacket[iter->first]);
@@ -106,7 +109,8 @@ void ServerGame::receiveFromClients()
 				//if the remaining data + data in tempBuf < enough data to construct the next Packet
 				//add remaining data to tempBuf, increment i, skip rest of loop
 				if ((data_length - i - 1 + tempBuf.size()) < nextDataSize[iter->first]) {
-					tempBuf[client_id].append(&(network_data[i]));
+					//tempBuf[client_id].append(&(network_data[i]));
+					tempBuf[iter->first].append(&(network_data[i]));
 					i += nextDataSize[iter->first];
 					continue;
 				}
@@ -115,7 +119,7 @@ void ServerGame::receiveFromClients()
 				//construct the Packet, deserialize tempBuf into Packet packet, clear tempBuf, flip the 
 				//curPacket switch, increment i, and MOVE ON to rest of loop
 				else {
-					tempBuf[client_id].append(&(network_data[i]), (nextDataSize[iter->first] - tempBuf.size()));
+					tempBuf[iter->first].append(&(network_data[i]), (nextDataSize[iter->first] - tempBuf.size()));
 					packet = deserializeToPacket((char*)(tempBuf.data()), nextDataSize[iter->first]);
 					curPacket[iter->first] = !(curPacket[iter->first]);
 					tempBuf.clear();
@@ -292,8 +296,8 @@ std::string ServerGame::serializeToChar(Packet packet)
 	boost::iostreams::stream<boost::iostreams::back_insert_device<std::string> > s(inserter);
 	boost::archive::binary_oarchive oa(s);
 
-	//oa << packet; //serializable object
-	oa & packet;
+	oa << packet; //serializable object
+	//oa & packet;
 
 	// don't forget to flush the stream to finish writing into the buffer
 	s.flush();
@@ -309,8 +313,8 @@ Packet ServerGame::deserializeToPacket(char * buffer, int buflen)
 	boost::iostreams::basic_array_source<char> device(buffer, buflen);
 	boost::iostreams::stream<boost::iostreams::basic_array_source<char> > s(device);
 	boost::archive::binary_iarchive ia(s);
-	//ia >> packet;
-	ia & packet;
+	ia >> packet;
+	//ia & packet;
 
 	return packet;
 }
@@ -339,7 +343,8 @@ void ServerGame::sendActionPackets()
 	std::string buffer = serializeToChar(packet);
 	char * packet_data = (char*)(buffer.data());
 	//const unsigned int packet_size = buffer.length() + 1;
-	const unsigned int packet_size = sizeof(buffer);
+	//const unsigned int packet_size = sizeof(buffer);
+	const unsigned int packet_size = buffer.size();
 
 	sendSizeData(packet_size);
 	network->sendToAll(packet_data, packet_size);
@@ -392,7 +397,8 @@ void ServerGame::sendModelUpdate()
 
 	std::string buffer = serializeToChar(packet);
 	char * packet_data = (char*)(buffer.data());
-	const unsigned int packet_size = buffer.size() + 1;
+	//const unsigned int packet_size = buffer.size() + 1;
+	const unsigned int packet_size = buffer.size();
 	//const unsigned int packet_size = sizeof(buffer);
 
 	sendSizeData(packet_size);
@@ -430,7 +436,8 @@ void ServerGame::sendModel2Update()
 
 	std::string buffer = serializeToChar(packet);
 	char * packet_data = (char*)(buffer.data());
-	const unsigned int packet_size = buffer.size() + 1;
+	//const unsigned int packet_size = buffer.size() + 1;
+	const unsigned int packet_size = buffer.size();
 	//const unsigned int packet_size = sizeof(buffer);
 
 	sendSizeData(packet_size);

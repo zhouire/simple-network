@@ -52,7 +52,8 @@ public:
 
 	//char * serializeToChar(Packet);
 
-	std::string serializeToChar(Packet);
+	//std::string serializeToChar(Packet);
+	std::string serializeToChar(Packet&);
 	
 	Packet deserializeToPacket(char *, int);
 

@@ -69,7 +69,7 @@ struct ClientGameMinor
 
 		std::string buffer = serializeToChar(packet);
 		char * packet_data = (char*)(buffer.data());
-		const unsigned int packet_size = buffer.size() + 1;
+		const unsigned int packet_size = buffer.size();
 		//const unsigned int packet_size = sizeof(buffer);
 
 		sendSizeData(packet_size);
