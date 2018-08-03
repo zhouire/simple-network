@@ -43,17 +43,27 @@ void ServerGame::update()
         printf("client %d has been connected to the server\n",client_id);
 
 		curPacket[client_id] = false;
+		if (curPacket[0]) {
+			printf("agh\n");
+		}
+		else {
+			printf("correct\n");
+		}
+
 		nextDataSize[client_id] = sizeof(Size);
 		tempBuf.push_back("");
         client_id++;
    }
 
-   receiveFromClients();
+   //if ((network->sessions).size()>0) {
+   if (client_id>0){
+	   //printf("receiving\n");
+	   receiveFromClients();
+   }
 }
 
 void ServerGame::receiveFromClients()
 {
-
     //Packet packet;
 	Packet packet;
 	Size size;
@@ -68,24 +78,29 @@ void ServerGame::receiveFromClients()
         if (data_length <= 0) 
         {
             //no data recieved
+			//printf("nothing\n");
             continue;
         }
 
         int i = 0;
+		printf("data length: %i \n", data_length);
         while (i < (unsigned int)data_length) 
         {
 			//this part deals with receiving data of varying sizes
 			
-			if (!curPacket[iter->first]) {
-				printf("SIZEEE");
+			if (!(curPacket[iter->first])) {
+				printf("evaluating size packe\n");
 				//if the remaining data + data in tempBuf < enough data to construct Size object
 				//just add the remaining data to the tempBuf, increment i, skip rest of loop
-				if ((data_length - i - 1 + tempBuf[iter->first].size()) < sizeof(Size)) {
+				if ((data_length - i + tempBuf[iter->first].size()) < sizeof(Size)) {
+					printf("too short\n");
 					//just append the rest of the data, add to i, and skip everything else
 					//tempBuf[client_id].append(&(network_data[i]));
-					tempBuf[iter->first].append(&(network_data[i]));
+					tempBuf[iter->first].append(&(network_data[i]), (data_length - i - 1));
 					//add enough to overflow the while condition
 					i += sizeof(Size);
+
+					continue;
 				}
 
 				//if we have enough data in the network_data and tempBuf, append enough data to tempBuf to
@@ -94,26 +109,33 @@ void ServerGame::receiveFromClients()
 				//curPacket switch (because we constructed a full object), and skip rest of loop
 				else {
 					//tempBuf[client_id].append(&(network_data[i]), (sizeof(Size) - tempBuf.size()));
-					tempBuf[iter->first].append(&(network_data[i]), (sizeof(Size) - tempBuf[iter->first].size()));
+					int s = tempBuf[iter->first].size();
+
+					tempBuf[iter->first].append(&(network_data[i]), (sizeof(Size) - s));
 					size.deserialize((char*)(tempBuf[iter->first].data()));
 					nextDataSize[iter->first] = size.size;
 					printf("yay size %i \n", nextDataSize[iter->first]);
-					curPacket[iter->first] = !(curPacket[iter->first]);
+					//curPacket[iter->first] = !(curPacket[iter->first]);
+					curPacket[iter->first] = true;
 					
-					i += (sizeof(Size) - tempBuf[iter->first].size());
+					i += (sizeof(Size) - s);
 
 					tempBuf[iter->first].clear();
+
+					continue;
 				}
 				//no matter what, we skip the rest of the loop if the current data is of Size type
-				continue;
+				
 			}
 
 			else {
 				//if the remaining data + data in tempBuf < enough data to construct the next Packet
 				//add remaining data to tempBuf, increment i, skip rest of loop
-				if ((data_length - i - 1 + tempBuf[iter->first].size()) < nextDataSize[iter->first]) {
-					//tempBuf[client_id].append(&(network_data[i]));
-					tempBuf[iter->first].append(&(network_data[i]));
+				printf("next data size %i \n", nextDataSize[iter->first]);
+				if ((data_length - i + tempBuf[iter->first].size()) < nextDataSize[iter->first]) {
+					printf("packet data too short\n");
+					//tempBuf[iter->first].append(&(network_data[i]));
+					tempBuf[iter->first].append(&(network_data[i]), (data_length - i - 1));
 					i += nextDataSize[iter->first];
 					continue;
 				}
@@ -122,11 +144,17 @@ void ServerGame::receiveFromClients()
 				//construct the Packet, deserialize tempBuf into Packet packet, clear tempBuf, flip the 
 				//curPacket switch, increment i, and MOVE ON to rest of loop
 				else {
-					tempBuf[iter->first].append(&(network_data[i]), (nextDataSize[iter->first] - tempBuf[iter->first].size()));
-					packet = deserializeToPacket((char*)(tempBuf[iter->first].data()), nextDataSize[iter->first]);
-					curPacket[iter->first] = !(curPacket[iter->first]);
+					int s = tempBuf[iter->first].size();
+
+					tempBuf[iter->first].append(&(network_data[i]), (nextDataSize[iter->first] - s));
+					printf("packet\n");
+					packet = deserializeToPacket((tempBuf[iter->first].data()), (nextDataSize[iter->first]));
+					printf("packet2\n");
+					//packet = deserializeToPacket(&((tempBuf[iter->first])[0]), nextDataSize[iter->first]);
+					//curPacket[iter->first] = !(curPacket[iter->first]);
+					curPacket[iter->first] = false;
 					
-					i += (nextDataSize[iter->first] - tempBuf.size());
+					i += (nextDataSize[iter->first] - s);
 
 					tempBuf[iter->first].clear();
 				}
@@ -311,7 +339,7 @@ std::string ServerGame::serializeToChar(Packet packet)
 	return serial_str;
 }
 
-Packet ServerGame::deserializeToPacket(char * buffer, int buflen)
+Packet ServerGame::deserializeToPacket(const char * buffer, int buflen)
 {
 	Packet packet;
 	// wrap buffer inside a stream and deserialize serial_str into obj
@@ -320,8 +348,9 @@ Packet ServerGame::deserializeToPacket(char * buffer, int buflen)
 	boost::archive::binary_iarchive ia(s);
 	ia >> packet;
 	//ia & packet;
+	printf("deserializing...");
 
-	return packet;
+	return packet; 
 }
 
 void ServerGame::sendSizeData(int packet_size) {

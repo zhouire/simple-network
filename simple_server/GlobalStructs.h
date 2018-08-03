@@ -4,12 +4,14 @@
 #include <vector>
 
 struct Part {
+	friend class boost::serialization::access;
+
 	Part() {}
 
 	int N;
 
-//private:
-	friend class boost::serialization::access;
+	//private:
+	//friend class boost::serialization::access;
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & N;
@@ -17,16 +19,21 @@ struct Part {
 };
 
 struct Model {
-	Model()
-	{}
+	friend class boost::serialization::access;
 
-	Part * P = new Part();
+	Part * P;
+	//Part * P = new Part();
 	//std::string * S;
 	std::string S;
 	std::vector<int> V;
 
-//private:
-	friend class boost::serialization::access;
+	Model()
+	{
+		P = new Part();
+	}
+
+	//private:
+	//friend class boost::serialization::access;
 	// When the class Archive corresponds to an output archive, the
 	// & operator is defined similar to <<.  Likewise, when the class Archive
 	// is a type of input archive the & operator is defined similar to >>.
@@ -39,14 +46,17 @@ struct Model {
 	}
 };
 
+
 struct Model2 {
+	friend class boost::serialization::access;
+
 	Model2() {}
 
 	Part P;
 	char C;
 	int I;
 
-	friend class boost::serialization::access;
+	//friend class boost::serialization::access;
 	// When the class Archive corresponds to an output archive, the
 	// & operator is defined similar to <<.  Likewise, when the class Archive
 	// is a type of input archive the & operator is defined similar to >>.
@@ -61,8 +71,8 @@ struct Model2 {
 
 /*
 struct Scene {
-	Model * M;
-	int N;
+Model * M;
+int N;
 };
 */
 
