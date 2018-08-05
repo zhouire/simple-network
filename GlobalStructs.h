@@ -29,7 +29,8 @@ struct Model {
 
 	Model()
 	{
-		P = new Part();
+		//P = new Part();
+		P = nullptr;
 	}
 
 //private:

@@ -33,7 +33,10 @@ int main()
     // initialize the client 
     //client = new ClientGame();
 
-	clientLoop((void*)12);
+	//clientLoop((void*)12);
+	while (true) {
+		Sleep(INFINITE);
+	}
 }
 
 /*

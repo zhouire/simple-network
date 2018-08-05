@@ -33,6 +33,9 @@ ClientGame::ClientGame(void)
 	clientPart.N = 0;
 	(clientModel2->P) = clientPart;
 
+	clientModel->P = new Part();
+	*(clientModel->P) = clientPart;
+
 	//set console exit actions
 	//SetConsoleCtrlHandler(ClientExitRoutine, true);
 
@@ -55,7 +58,6 @@ ClientGame::ClientGame(void)
 	//const unsigned int packet_size = sizeof(buffer);
 
 	sendSizeData(packet_size);
-	printf("done serializing size");
     NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
 }
 
@@ -91,7 +93,7 @@ std::string ClientGame::serializeToChar(Packet &packet)
 	// don't forget to flush the stream to finish writing into the buffer
 	s.flush();
 
-	printf("%i %i\n", serial_str.size(),serial_str.length());
+	//printf("%i %i\n", serial_str.size(),serial_str.length());
 
 	//return (char*)(serial_str.data());
 	return serial_str;
@@ -119,7 +121,7 @@ void ClientGame::sendSizeData(int packet_size) {
 
 	s.serialize(s_data);
 
-	printf("client serializing size\n");
+	//printf("client serializing size\n");
 
 	NetworkServices::sendMessage(network->ConnectSocket, s_data, s_size);
 }
