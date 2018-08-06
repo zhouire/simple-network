@@ -66,10 +66,18 @@ void ServerGame::receiveFromClients()
 	Size size;
 
     // go through all clients
-    std::map<unsigned int, SOCKET>::iterator iter;
+    //std::map<unsigned int, SOCKET>::iterator iter;
 
-    for(iter = network->sessions.begin(); iter != network->sessions.end(); iter++)
-    {
+//reset:
+	//printf("resetting on client exit");
+
+    //for(iter = network->sessions.begin(); iter != network->sessions.end(); iter++)
+	//for (auto iter = network->sessions.cbegin(), next_it = network->sessions.cbegin(); iter != network->sessions.cend(); iter = next_it)
+	for (auto iter = network->sessions.begin(); iter != network->sessions.end() /* not hoisted */; /* no inc. */)
+	{
+		//next_it = iter; ++next_it;
+		bool client_exit = false;
+
 		int data_length = network->receiveData(iter->first, network_data);
 
         if (data_length <= 0) 
@@ -274,11 +282,16 @@ void ServerGame::receiveFromClients()
 				case CLIENT_EXIT:
 				{
 					printf("Client %i is disconnecting. Closing the socket.", iter->first);
-					
+
 					closesocket(iter->second);
 					WSACleanup();
-					//exit(1);
+					//iter = (network->sessions).erase(iter);
+					i += data_length;
+					client_exit = true;
+					(network->sessions).erase(iter++);
 					
+					//iter = (network->sessions).begin();
+					//goto reset;
 
 					break;
 				}
@@ -291,7 +304,12 @@ void ServerGame::receiveFromClients()
 
                     break;
             }
+
         }
+
+		if (!client_exit) {
+			++iter;
+		}
     }
 }
 

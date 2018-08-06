@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simple_server", "simple_ser
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simple_client", "simple_client\simple_client.vcxproj", "{E204CBDD-72C0-4ED0-BA1A-5AF04F8B1DCB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "simple_client_2", "simple_client_2\simple_client_2.vcxproj", "{E79518B1-20DC-4B41-9009-485BE9088033}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{E204CBDD-72C0-4ED0-BA1A-5AF04F8B1DCB}.Release|x64.Build.0 = Release|x64
 		{E204CBDD-72C0-4ED0-BA1A-5AF04F8B1DCB}.Release|x86.ActiveCfg = Release|Win32
 		{E204CBDD-72C0-4ED0-BA1A-5AF04F8B1DCB}.Release|x86.Build.0 = Release|Win32
+		{E79518B1-20DC-4B41-9009-485BE9088033}.Debug|x64.ActiveCfg = Debug|x64
+		{E79518B1-20DC-4B41-9009-485BE9088033}.Debug|x64.Build.0 = Debug|x64
+		{E79518B1-20DC-4B41-9009-485BE9088033}.Debug|x86.ActiveCfg = Debug|Win32
+		{E79518B1-20DC-4B41-9009-485BE9088033}.Debug|x86.Build.0 = Debug|Win32
+		{E79518B1-20DC-4B41-9009-485BE9088033}.Release|x64.ActiveCfg = Release|x64
+		{E79518B1-20DC-4B41-9009-485BE9088033}.Release|x64.Build.0 = Release|x64
+		{E79518B1-20DC-4B41-9009-485BE9088033}.Release|x86.ActiveCfg = Release|Win32
+		{E79518B1-20DC-4B41-9009-485BE9088033}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

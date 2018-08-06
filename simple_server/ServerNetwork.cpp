@@ -136,19 +136,30 @@ int ServerNetwork::receiveData(unsigned int client_id, char * recvbuf)
 void ServerNetwork::sendToAll(char * packets, int totalSize)
 {
     SOCKET currentSocket;
-    std::map<unsigned int, SOCKET>::iterator iter;
+    //std::map<unsigned int, SOCKET>::iterator iter;
     int iSendResult;
 
-    for (iter = sessions.begin(); iter != sessions.end(); iter++)
-    {
-        currentSocket = iter->second;
+	//for (iter = sessions.begin(); iter != sessions.end(); iter++)
+	//for (auto iter = sessions.cbegin(), next_it = sessions.cbegin(); iter != sessions.cend(); iter = next_it)
+	for (auto iter = sessions.begin(); iter != sessions.end() /* not hoisted */; /* no inc. */)
+	{
+		//next_it = iter; ++next_it;
+
+        //currentSocket = iter->second;
+		currentSocket = iter->second;
         iSendResult = NetworkServices::sendMessage(currentSocket, packets, totalSize);
 
         if (iSendResult == SOCKET_ERROR) 
         {
             printf("send failed with error: %d\n", WSAGetLastError());
-            ::closesocket(currentSocket);
+            closesocket(currentSocket);
+			sessions.erase(iter++);
+			//continue;
         }
+
+		else {
+			++iter;
+		}
     }
 }
 
