@@ -105,6 +105,9 @@ bool ServerNetwork::acceptNewClient(unsigned int & id)
 
         // insert new client into session id table
         sessions.insert( pair<unsigned int, SOCKET>(id, ClientSocket) );
+		
+		//insert client into send_session table
+		//send_sessions.insert(pair<unsigned int, SOCKET>(id, ClientSocket));
 
         return true;
     }
@@ -123,7 +126,7 @@ int ServerNetwork::receiveData(unsigned int client_id, char * recvbuf)
         if (iResult == 0)
         {
             printf("Connection closed\n");
-            ::closesocket(currentSocket);
+            closesocket(currentSocket);
         }
 
         return iResult;
@@ -153,8 +156,8 @@ void ServerNetwork::sendToAll(char * packets, int totalSize)
         {
             printf("send failed with error: %d\n", WSAGetLastError());
             closesocket(currentSocket);
+			//send_sessions.erase(iter++);
 			sessions.erase(iter++);
-			//continue;
         }
 
 		else {

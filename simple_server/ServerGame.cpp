@@ -166,7 +166,7 @@ void ServerGame::receiveFromClients()
 
                 case INIT_CONNECTION:
 
-                    printf("server received init packet from client\n");
+                    printf("server received init packet from client %i\n", iter->first);
 
                     sendActionPackets();
 
@@ -174,7 +174,7 @@ void ServerGame::receiveFromClients()
 
                 case ACTION_EVENT:
 
-                    printf("server received action event packet from client\n");
+                    printf("server received action event packet from client %i\n", iter->first);
 					//sendStringPackets();
 					/*
 					if (client_id % 2 == 1) {
@@ -211,7 +211,7 @@ void ServerGame::receiveFromClients()
 				{
 					(centralModel->V).push_back(packet.i);
 					std::vector<int> v = centralModel->V;
-					printf("added num %i, %i \n\n", v[v.size() - 1], v.size());
+					printf("%i : added num %i, %i \n\n", iter->first, v[v.size() - 1], v.size());
 
 					sendActionPackets();
 
@@ -234,7 +234,7 @@ void ServerGame::receiveFromClients()
 
 				case FLOAT_PACKET:
 				{
-					printf("Server got float %f \n", packet.f);
+					printf("%i : Server got float %f \n", iter->first, packet.f);
 
 					sendActionPackets();
 
@@ -246,7 +246,7 @@ void ServerGame::receiveFromClients()
 				{
 
 					(centralModel2->I) += packet.i;
-					printf("Server got int %i, final value %i \n", packet.i, centralModel2->I);
+					printf("%i : Server got int %i, final value %i \n", iter->first, packet.i, centralModel2->I);
 
 					sendModel2Update();
 
@@ -258,7 +258,7 @@ void ServerGame::receiveFromClients()
 				{
 
 					(centralModel->P)->N += packet.i;
-					printf("Server received int %i, Model Part int %i \n", packet.i, (centralModel->P)->N);
+					printf("%i : Server received int %i, Model Part int %i \n", iter->first, packet.i, (centralModel->P)->N);
 
 					sendModelUpdate();
 
@@ -270,7 +270,7 @@ void ServerGame::receiveFromClients()
 				{
 
 					centralModel->S = packet.s;
-					printf("Server received string %s, Model string now %s \n", (packet.s).c_str(), (centralModel->S).c_str());
+					printf("%i : Server received string %s, Model string now %s \n", iter->first, (packet.s).c_str(), (centralModel->S).c_str());
 
 					sendModelUpdate();
 

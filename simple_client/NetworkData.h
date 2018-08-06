@@ -2,7 +2,8 @@
 #include <string.h>
 #include <string>
 
-#define MAX_PACKET_SIZE 10000000
+//#define MAX_PACKET_SIZE 10000000
+#define MAX_PACKET_SIZE 1000000
 
 enum PacketTypes {
 

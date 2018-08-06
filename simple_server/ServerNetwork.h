@@ -37,5 +37,7 @@ public:
 
     // table to keep track of each client's socket
     std::map<unsigned int, SOCKET> sessions; 
+	//table to keep track of the sockets we can send to (keep receiving from exited clients, but don't send to them)
+	//std::map<unsigned int, SOCKET> send_sessions;
 };
 
