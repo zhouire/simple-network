@@ -24,8 +24,6 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NetworkServices.cpp" />
     <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -42,11 +40,10 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{9EFFB6D9-4EDB-42A5-8BAF-F77C000AA362}</ProjectGuid>
+    <ProjectGuid>{E204CBDD-72C0-4ED0-BA1A-5AF04F8B1DCB}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ConsoleApplication1</RootNamespace>
+    <RootNamespace>simpleclient</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
-    <ProjectName>simple-network</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -95,21 +92,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files\boost_1_67_0;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files\boost_1_67_0;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files\boost_1_67_0\stage\lib;C:\Program Files\boost_1_67_0\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files\boost_1_67_0;E:\Classes\2018 Summer\UROP\simple_network;E:\Classes\2018 Summer\UROP\simple_network\simple_client;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Program Files\boost_1_67_0;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Program Files\boost_1_67_0;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files\boost_1_67_0\stage\lib;C:\Program Files\boost_1_67_0\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files\boost_1_67_0;E:\Classes\2018 Summer\UROP\simple_network;E:\Classes\2018 Summer\UROP\simple_network\simple_client;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
