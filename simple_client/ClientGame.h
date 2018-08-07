@@ -40,6 +40,8 @@ public:
 
 	void changeModelString(std::string);
 
+	void modifyModelQuat(int, int, int, int);
+
 	void sendExitPacket();
 
     char network_data[MAX_PACKET_SIZE];

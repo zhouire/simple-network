@@ -92,8 +92,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files\boost_1_67_0;E:\Classes\2018 Summer\UROP\simple_network;E:\Classes\2018 Summer\UROP\simple_network\simple_client_2;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files\boost_1_67_0\stage\lib;C:\Program Files\boost_1_67_0\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\Classes\2018 Summer\UROP\simple_network\Dependencies\OculusSDK\LibOVR\Include;E:\Classes\2018 Summer\UROP\simple_network\Dependencies\glm\glm;C:\Program Files\boost_1_67_0;E:\Classes\2018 Summer\UROP\simple_network;E:\Classes\2018 Summer\UROP\simple_network\simple_client_2;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\Classes\2018 Summer\UROP\simple_network\Dependencies\OculusSDK\LibOVR\Lib;C:\Program Files\boost_1_67_0\stage\lib;C:\Program Files\boost_1_67_0\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
@@ -103,8 +103,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Program Files\boost_1_67_0;E:\Classes\2018 Summer\UROP\simple_network;E:\Classes\2018 Summer\UROP\simple_network\simple_client_2;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files\boost_1_67_0\stage\lib;C:\Program Files\boost_1_67_0\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\Classes\2018 Summer\UROP\simple_network\Dependencies\OculusSDK\LibOVR\Include;E:\Classes\2018 Summer\UROP\simple_network\Dependencies\glm\glm;C:\Program Files\boost_1_67_0;E:\Classes\2018 Summer\UROP\simple_network;E:\Classes\2018 Summer\UROP\simple_network\simple_client_2;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\Classes\2018 Summer\UROP\simple_network\Dependencies\OculusSDK\LibOVR\Lib;C:\Program Files\boost_1_67_0\stage\lib;C:\Program Files\boost_1_67_0\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -118,8 +118,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Program Files\boost_1_67_0\stage\lib;C:\Program Files\boost_1_67_0\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>C:\Program Files\boost_1_67_0\stage\lib\libboost_serialization-vc141-mt-gd-x64-1_67.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\Classes\2018 Summer\UROP\simple_network\Dependencies\OculusSDK\LibOVR\Lib;C:\Program Files\boost_1_67_0\stage\lib;C:\Program Files\boost_1_67_0\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>E:\Classes\2018 Summer\UROP\simple_network\Dependencies\OculusSDK\LibOVR\Lib\LibOVR.lib;C:\Program Files\boost_1_67_0\stage\lib\libboost_serialization-vc141-mt-gd-x64-1_67.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -170,8 +170,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Program Files\boost_1_67_0\stage\lib;C:\Program Files\boost_1_67_0\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>C:\Program Files\boost_1_67_0\stage\lib\libboost_serialization-vc141-mt-gd-x64-1_67.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\Classes\2018 Summer\UROP\simple_network\Dependencies\OculusSDK\LibOVR\Lib;C:\Program Files\boost_1_67_0\stage\lib;C:\Program Files\boost_1_67_0\libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>E:\Classes\2018 Summer\UROP\simple_network\Dependencies\OculusSDK\LibOVR\Lib\LibOVR.lib;C:\Program Files\boost_1_67_0\stage\lib\libboost_serialization-vc141-mt-gd-x64-1_67.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

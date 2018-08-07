@@ -276,6 +276,40 @@ void ClientGame::changeModelString(std::string str)
 }
 
 
+void ClientGame::modifyModelQuat(int x, int y, int z, int w) {
+	Packet packet;
+	packet.packet_type = MODIFY_MODEL_QUAT;
+	/*
+	glm::quat quatf(0, 0, 0, 0);
+	if (c == 'x') {
+		quatf.x += i;
+	}
+	else if (c == 'y') {
+		quatf.y += i;
+	}
+	else if (c == 'z'){
+		quatf.z += i;
+	}
+	else if (c == 'w') {
+		quatf.w += i;
+	}
+	*/
+	//packet.q = glm::quat(w, x, y, z);
+	//printf("%f, %f, %f, %f\n", (packet.q).x, (packet.q).y, (packet.q).z, (packet.q).w);
+	//packet.vec = glm::vec3(x, y, z);
+	//printf("%f,%f,%f\n", (packet.vec).x, (packet.vec).y, (packet.vec).z);
+	packet.OVRvec = OVR::Vector3f(x, y, z);
+	printf("%f,%f,%f\n", (packet.OVRvec).x, (packet.OVRvec).y, (packet.OVRvec).z);
+
+	std::string buffer = serializeToChar(packet);
+	char * packet_data = (char*)(buffer.data());
+	const unsigned int packet_size = buffer.size();
+
+	sendSizeData(packet_size);
+	NetworkServices::sendMessage(network->ConnectSocket, packet_data, packet_size);
+}
+
+
 void ClientGame::sendExitPacket()
 {
 	
@@ -450,6 +484,9 @@ void ClientGame::update()
 				*clientModel = packet.m;
 
 				printf("Model updated with Part %i, string %s \n", (clientModel->P)->N, (clientModel->S).c_str());
+				//printf("Model updated with Quat %f, %f, %f, %f \n", (clientModel->Q).x, (clientModel->Q).y, (clientModel->Q).z, (clientModel->Q).w);
+				//printf("Model updated with vec3 %f, %f, %f \n", (clientModel->vec).x, (clientModel->vec).y, (clientModel->vec).z);
+				printf("Model updated with Vector3f %f, %f, %f \n", (clientModel->OVRvec).x, (clientModel->OVRvec).y, (clientModel->OVRvec).z);
 
 				break;
 			}
@@ -482,6 +519,7 @@ void ClientGame::updateKeyPress()
 			//addToModel2Int(1);
 			addToModelPart(1);
 			changeModelString("after");
+			modifyModelQuat(1, 2, 3, 0);
 
 
 			a_press = true;
@@ -505,6 +543,7 @@ void ClientGame::updateKeyPress()
 
 			addToModelPart(2);
 			changeModelString("super");
+			modifyModelQuat(4, 5, 6, 0);
 
 			s_press = true;
 		}
@@ -527,6 +566,7 @@ void ClientGame::updateKeyPress()
 
 			addToModelPart(3);
 			changeModelString("durian");
+			modifyModelQuat(7, 8, 9, 0);
 
 			d_press = true;
 		}

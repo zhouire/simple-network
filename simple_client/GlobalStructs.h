@@ -3,6 +3,56 @@
 #include <string>
 #include <vector>
 
+/*
+namespace boost {
+	namespace serialization {
+
+		template<class Archive>
+		void serialize(Archive & ar, glm::detail::tquat<float> & g, const unsigned int version)
+		{
+			ar & g.x;
+			ar & g.y;
+			ar & g.z;
+			ar & g.w;
+		}
+
+	} // namespace serialization
+} // namespace boost
+*/
+namespace boost {
+	namespace serialization {
+		
+		template<class Archive>
+		void serialize(Archive & ar, glm::quat & g, const unsigned int version)
+		{
+			ar & g.x;
+			ar & g.y;
+			ar & g.z;
+			ar & g.w;
+		}
+		
+
+		template<class Archive>
+		void serialize(Archive & ar, glm::vec3 & vec, const unsigned int version)
+		{
+			ar & boost::serialization::make_nvp("x", vec.x);
+			ar & boost::serialization::make_nvp("y", vec.y);
+			ar & boost::serialization::make_nvp("z", vec.z);
+		}
+
+
+		template<class Archive>
+		void serialize(Archive & ar, OVR::Vector3f & v, const unsigned int version)
+		{
+			ar & v.x;
+			ar & v.y;
+			ar & v.z;
+		}
+
+	} // namespace serialization
+} // namespace boost
+
+
 struct Part {
 	friend class boost::serialization::access;
 
@@ -26,6 +76,9 @@ struct Model {
 	//std::string * S;
 	std::string S;
 	std::vector<int> V;
+	glm::quat Q;
+	glm::vec3 vec;
+	OVR::Vector3f OVRvec;
 
 	Model()
 	{
@@ -44,6 +97,9 @@ struct Model {
 		ar & P;
 		ar & S;
 		ar & V;
+		ar & Q;
+		ar & vec;
+		ar & OVRvec;
 	}
 };
 

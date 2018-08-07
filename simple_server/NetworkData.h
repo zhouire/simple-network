@@ -28,14 +28,16 @@ enum PacketTypes {
 	MODEL2_UPDATE = 9,
 
 	ADD_TO_MODEL_PART = 10,
-	
+
 	CHANGE_MODEL_STRING = 11,
+
+	MODIFY_MODEL_QUAT = 12,
 
 };
 
 //this is a small segment sent before each Packet, defining the Packet's size for deserialization
 struct Size {
-	Size(){}
+	Size() {}
 
 	int size;
 
@@ -60,6 +62,9 @@ struct Packet {
 	//std::string * s;
 	//Model * m;
 	Model m;
+	glm::quat q;
+	glm::vec3 vec;
+	OVR::Vector3f OVRvec;
 
 	std::string s;
 	char c;
@@ -68,15 +73,15 @@ struct Packet {
 
 	/*
 	void serialize(char * data) {
-		memcpy(data, this, sizeof(Packet));
+	memcpy(data, this, sizeof(Packet));
 	}
 
 	void deserialize(char * data) {
-		memcpy(this, data, sizeof(Packet));
+	memcpy(this, data, sizeof(Packet));
 	}
 	*/
 
-//private:
+	//private:
 	//friend class boost::serialization::access;
 
 	// When the class Archive corresponds to an output archive, the
@@ -92,6 +97,9 @@ struct Packet {
 		ar & s;
 		ar & c;
 		ar & m2;
+		ar & q;
+		ar & vec;
+		ar & OVRvec;
 	}
 };
 

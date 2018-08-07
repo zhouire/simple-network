@@ -30,6 +30,12 @@ ServerGame::ServerGame(void)
 	centralModel->P = new Part();
 	*(centralModel->P) = centralPart;
 
+	centralModel->Q = glm::quat(0,0,0,0);
+	//(centralModel->Q).x = 0;
+	//(centralModel->Q).y = 0;
+	//(centralModel->Q).z = 0;
+	//(centralModel->Q).w = 0;
+
     // set up the server network to listen 
     network = new ServerNetwork(); 
 }
@@ -278,6 +284,29 @@ void ServerGame::receiveFromClients()
 
 				}
 
+				case MODIFY_MODEL_QUAT:
+				{
+					/*
+					(centralModel->Q).x = (centralModel->Q).x + (packet.q).x;
+					(centralModel->Q).y = (centralModel->Q).y + (packet.q).y;
+					(centralModel->Q).z = (centralModel->Q).z + (packet.q).z;
+					(centralModel->Q).w = (centralModel->Q).w + (packet.q).w;
+					
+					//centralModel->Q = packet.q;
+
+					printf("%i : Server received quat %f, %f, %f, %f \n", iter->first, (centralModel->Q).x, (centralModel->Q).y, (centralModel->Q).z, (centralModel->Q).w);
+					*/
+
+					
+					centralModel->OVRvec = packet.OVRvec;
+
+					printf("%i : Server received Vector3f %f, %f, %f, \n", iter->first, (centralModel->OVRvec).x, (centralModel->OVRvec).y, (centralModel->OVRvec).z);
+					
+
+					sendModelUpdate();
+
+					break;
+				}
 
 				case CLIENT_EXIT:
 				{
