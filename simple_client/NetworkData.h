@@ -54,8 +54,6 @@ struct Size {
 struct Packet {
 	friend class boost::serialization::access;
 
-	Packet() {}
-
 	unsigned int packet_type;
 	int i;
 	float f;
@@ -65,11 +63,17 @@ struct Packet {
 	glm::quat q;
 	glm::vec3 vec;
 	OVR::Vector3f OVRvec;
+	DWORD u;
+	OVR::Matrix4f Mat4;
 
 	std::string s;
 	char c;
 
 	Model2 m2;
+
+	Packet() :
+		m(OVR::Vector3f(0, 0, 0))
+	{}
 
 	/*
 	void serialize(char * data) {
@@ -100,6 +104,8 @@ struct Packet {
 		ar & q;
 		ar & vec;
 		ar & OVRvec;
+		ar & u;
+		ar & Mat4;
 	}
 };
 

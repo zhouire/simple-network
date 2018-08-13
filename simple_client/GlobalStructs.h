@@ -40,13 +40,18 @@ namespace boost {
 			ar & boost::serialization::make_nvp("z", vec.z);
 		}
 
-
 		template<class Archive>
 		void serialize(Archive & ar, OVR::Vector3f & v, const unsigned int version)
 		{
 			ar & v.x;
 			ar & v.y;
 			ar & v.z;
+		}
+
+		template<class Archive>
+		void serialize(Archive & ar, OVR::Matrix4f & m, const unsigned int version)
+		{
+			ar & m.M;
 		}
 
 	} // namespace serialization
@@ -68,6 +73,7 @@ struct Part {
 	}
 };
 
+
 struct Model {
 	friend class boost::serialization::access;
 
@@ -79,11 +85,18 @@ struct Model {
 	glm::quat Q;
 	glm::vec3 vec;
 	OVR::Vector3f OVRvec;
+	DWORD d;
+	OVR::Matrix4f Mat4;
 
-	Model()
+	Model(OVR::Vector3f v) :
+		OVRvec(v)
 	{
 		//P = new Part();
 		P = nullptr;
+	}
+
+	void testerFunc() {
+
 	}
 
 //private:
@@ -100,6 +113,8 @@ struct Model {
 		ar & Q;
 		ar & vec;
 		ar & OVRvec;
+		ar & d;
+		ar & Mat4;
 	}
 };
 

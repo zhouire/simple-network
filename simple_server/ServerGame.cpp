@@ -14,7 +14,7 @@ ServerGame::ServerGame(void)
 	curPacket = new bool;
 	nextDataSize = new int;
 
-	centralModel = new Model();
+	centralModel = new Model(OVR::Vector3f(0, 0, 0));
 	centralModel2 = new Model2;
 
 	centralModel2->C = 'q';
@@ -298,10 +298,13 @@ void ServerGame::receiveFromClients()
 					*/
 
 					
-					centralModel->OVRvec = packet.OVRvec;
+					//centralModel->OVRvec = packet.OVRvec;
+					//centralModel->d = packet.u;
+					centralModel->Mat4 = packet.Mat4;
 
-					printf("%i : Server received Vector3f %f, %f, %f, \n", iter->first, (centralModel->OVRvec).x, (centralModel->OVRvec).y, (centralModel->OVRvec).z);
-					
+					//printf("%i : Server received Vector3f %f, %f, %f, \n", iter->first, (centralModel->OVRvec).x, (centralModel->OVRvec).y, (centralModel->OVRvec).z);
+					//printf("%i : Server got DWORD %i\n", iter->first, centralModel->d);
+					printf("%i : Server received Matrix4f %f, %f, %f, %f, \n", iter->first, (centralModel->Mat4).M[0][0], (centralModel->Mat4).M[1][1], (centralModel->Mat4).M[2][2], (centralModel->Mat4).M[3][3]);
 
 					sendModelUpdate();
 

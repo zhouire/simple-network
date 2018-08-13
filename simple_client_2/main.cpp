@@ -67,27 +67,3 @@ BOOL WINAPI ClientExitRoutine(_In_ DWORD dwCtrlType) {
 	return false;
 }
 
-/*
-void clientKeyLoop()
-{
-	while (true)
-	{
-		client->updateKeyPress();
-	}
-}
-*/
-
-
-/*
-void clientLoop()
-{
-	while (true)
-	{
-		//do game stuff
-		client->update();
-		client->updateKeyPress();
-
-		//client2->update();
-	}
-}
-*/

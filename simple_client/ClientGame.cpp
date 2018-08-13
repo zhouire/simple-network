@@ -7,7 +7,7 @@
 std::vector<std::string> strDataBase{ "hello", "my", "name" };
 std::string strPiece;
 int iter = 0;
-Model * mPiece = new Model();
+//Model * mPiece = new Model();
 
 //Model * clientModel = new Model();
 
@@ -24,7 +24,7 @@ ClientGame::ClientGame(void)
 	curPacket = false;
 	nextDataSize = sizeof(Size);
 
-	clientModel = new Model();
+	clientModel = new Model(OVR::Vector3f(0, 0, 0));
 	clientModel2 = new Model2;
 
 	clientModel2->C = 'q';
@@ -298,8 +298,13 @@ void ClientGame::modifyModelQuat(int x, int y, int z, int w) {
 	//printf("%f, %f, %f, %f\n", (packet.q).x, (packet.q).y, (packet.q).z, (packet.q).w);
 	//packet.vec = glm::vec3(x, y, z);
 	//printf("%f,%f,%f\n", (packet.vec).x, (packet.vec).y, (packet.vec).z);
-	packet.OVRvec = OVR::Vector3f(x, y, z);
-	printf("%f,%f,%f\n", (packet.OVRvec).x, (packet.OVRvec).y, (packet.OVRvec).z);
+	//packet.OVRvec = OVR::Vector3f(x, y, z);
+	//printf("%f,%f,%f\n", (packet.OVRvec).x, (packet.OVRvec).y, (packet.OVRvec).z);
+	//packet.u = x * 1000;
+	//printf("Client sending DWORD : %i\n", packet.u);
+
+	packet.Mat4 = OVR::Matrix4f(x, y, z, w, x, y, z, w, x, y, z, w, x, y, z, w);
+	printf("%f,%f,%f,%f\n", (packet.Mat4).M[0][0], (packet.Mat4).M[1][1], (packet.Mat4).M[2][2], (packet.Mat4).M[3][3]);
 
 	std::string buffer = serializeToChar(packet);
 	char * packet_data = (char*)(buffer.data());
@@ -486,7 +491,9 @@ void ClientGame::update()
 				printf("Model updated with Part %i, string %s \n", (clientModel->P)->N, (clientModel->S).c_str());
 				//printf("Model updated with Quat %f, %f, %f, %f \n", (clientModel->Q).x, (clientModel->Q).y, (clientModel->Q).z, (clientModel->Q).w);
 				//printf("Model updated with vec3 %f, %f, %f \n", (clientModel->vec).x, (clientModel->vec).y, (clientModel->vec).z);
-				printf("Model updated with Vector3f %f, %f, %f \n", (clientModel->OVRvec).x, (clientModel->OVRvec).y, (clientModel->OVRvec).z);
+				//printf("Model updated with Vector3f %f, %f, %f \n", (clientModel->OVRvec).x, (clientModel->OVRvec).y, (clientModel->OVRvec).z);
+				//printf("Model updated with DWORD %i \n", clientModel->d);
+				printf("Model updated with Matrix4f %f, %f, %f, %f\n", (clientModel->Mat4).M[0][0], (clientModel->Mat4).M[1][1], (clientModel->Mat4).M[2][2], (clientModel->Mat4).M[3][3]);
 
 				break;
 			}

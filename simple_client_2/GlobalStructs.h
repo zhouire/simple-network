@@ -6,21 +6,6 @@
 /*
 namespace boost {
 	namespace serialization {
-
-		template<class Archive>
-		void serialize(Archive & ar, glm::detail::tquat<float> & g, const unsigned int version)
-		{
-			ar & g.x;
-			ar & g.y;
-			ar & g.z;
-			ar & g.w;
-		}
-
-	} // namespace serialization
-} // namespace boost
-*/
-namespace boost {
-	namespace serialization {
 		
 		template<class Archive>
 		void serialize(Archive & ar, glm::quat & g, const unsigned int version)
@@ -48,12 +33,20 @@ namespace boost {
 			ar & v.z;
 		}
 
+		template<class Archive>
+		void serialize(Archive & ar, OVR::Matrix4f & m, const unsigned int version)
+		{
+			ar & m.M;
+		}
+
+		
 	} // namespace serialization
 } // namespace boost
+*/
 
 
 struct Part {
-	friend class boost::serialization::access;
+	//friend class boost::serialization::access;
 
 	Part() {}
 
@@ -61,11 +54,14 @@ struct Part {
 
 //private:
 	//friend class boost::serialization::access;
+	/*
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & N;
 	}
+	*/
 };
+
 
 struct Model {
 	friend class boost::serialization::access;
@@ -78,11 +74,18 @@ struct Model {
 	glm::quat Q;
 	glm::vec3 vec;
 	OVR::Vector3f OVRvec;
+	DWORD d;
+	OVR::Matrix4f Mat4;
 
-	Model()
+	Model(OVR::Vector3f v) :
+		OVRvec(v)
 	{
 		//P = new Part();
 		P = nullptr;
+	}
+
+	void testerFunc() {
+
 	}
 
 //private:
@@ -99,6 +102,8 @@ struct Model {
 		ar & Q;
 		ar & vec;
 		ar & OVRvec;
+		ar & d;
+		ar & Mat4;
 	}
 };
 
