@@ -445,7 +445,7 @@ void ClientGame::update()
 				//added
 				//sendStringPackets(mPiece);
 
-				sendFloat(iter + 0.5f);
+				//sendFloat(iter + 0.5f);
 
                 break;
 

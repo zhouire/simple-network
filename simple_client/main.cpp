@@ -28,12 +28,13 @@ int main()
 
 	SetConsoleCtrlHandler(ClientExitRoutine, true);
 	// create thread with arbitrary argument for the run function
-    _beginthread( clientLoop, 0, (void*)12);
+    //_beginthread( clientLoop, 0, (void*)12);
 
     // initialize the client 
     //client = new ClientGame();
 
-	//clientLoop((void*)12);
+	clientLoop((void*)12);
+
 	while (true) {
 		Sleep(INFINITE);
 	}
