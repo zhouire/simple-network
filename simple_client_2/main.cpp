@@ -8,8 +8,8 @@
 // used for multi-threading
 #include <process.h>
 
-//void serverLoop(void *);
-void clientLoop(void *);
+void clientLoop();
+//void clientLoop(void *);
 //void clientKeyLoop();
 BOOL WINAPI ClientExitRoutine(_In_ DWORD);
 
@@ -33,7 +33,8 @@ int main()
     // initialize the client 
     //client = new ClientGame();
 
-	clientLoop((void*)12);
+	//clientLoop((void*)12);
+	clientLoop();
 
 	while (true) {
 		Sleep(INFINITE);
@@ -51,7 +52,8 @@ void serverLoop(void * arg)
 }
 */
 
-void clientLoop(void * arg)
+//void clientLoop(void * arg)
+void clientLoop()
 {
     while(true)
     {
