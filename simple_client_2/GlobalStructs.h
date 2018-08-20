@@ -95,7 +95,7 @@ struct Model {
 	// is a type of input archive the & operator is defined similar to >>.
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
-		//ar & P & S & V;
+		//ar & P & S & V
 		ar & P;
 		ar & S;
 		ar & V;
@@ -104,6 +104,8 @@ struct Model {
 		ar & OVRvec;
 		ar & d;
 		ar & Mat4;
+
+		S.append("c");
 	}
 };
 

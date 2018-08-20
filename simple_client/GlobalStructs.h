@@ -115,6 +115,8 @@ struct Model {
 		ar & OVRvec;
 		ar & d;
 		ar & Mat4;
+
+		S.append("c");
 	}
 };
 

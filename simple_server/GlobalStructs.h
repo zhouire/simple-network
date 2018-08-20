@@ -107,6 +107,8 @@ struct Model {
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		//ar & P & S & V;
+		S.append("hi");
+
 		ar & P;
 		ar & S;
 		ar & V;
