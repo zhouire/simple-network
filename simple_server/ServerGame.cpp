@@ -14,7 +14,9 @@ ServerGame::ServerGame(void)
 	curPacket = new bool;
 	nextDataSize = new int;
 
-	centralModel = new Model(OVR::Vector3f(0, 0, 0));
+	//centralModel = new Model(OVR::Vector3f(0, 0, 0));
+	//centralModel = new Model3(OVR::Vector3f(0, 0, 0));
+	centralModel = new Model3(glm::vec3(0, 0, 0));
 	centralModel2 = new Model2;
 
 	centralModel2->C = 'q';
@@ -68,7 +70,7 @@ void ServerGame::update()
 void ServerGame::receiveFromClients()
 {
     //Packet packet;
-	Packet packet;
+	Packet * packet;
 	Size size;
 
     // go through all clients
@@ -168,7 +170,7 @@ void ServerGame::receiveFromClients()
 			//packet = deserializeToPacket(&(network_data[i]), sizeof(Packet));
 			//i += sizeof(Packet);
 
-            switch (packet.packet_type) {
+            switch (packet->packet_type) {
 
                 case INIT_CONNECTION:
 
@@ -215,7 +217,7 @@ void ServerGame::receiveFromClients()
 
 				case VECTOR_ADDITION:
 				{
-					(centralModel->V).push_back(packet.i);
+					(centralModel->V).push_back(packet->i);
 					std::vector<int> v = centralModel->V;
 					printf("%i : added num %i, %i \n\n", iter->first, v[v.size() - 1], v.size());
 
@@ -240,7 +242,7 @@ void ServerGame::receiveFromClients()
 
 				case FLOAT_PACKET:
 				{
-					printf("%i : Server got float %f \n", iter->first, packet.f);
+					printf("%i : Server got float %f \n", iter->first, packet->f);
 
 					sendActionPackets();
 
@@ -251,8 +253,8 @@ void ServerGame::receiveFromClients()
 				case MODEL2_ADD:
 				{
 
-					(centralModel2->I) += packet.i;
-					printf("%i : Server got int %i, final value %i \n", iter->first, packet.i, centralModel2->I);
+					(centralModel2->I) += packet->i;
+					printf("%i : Server got int %i, final value %i \n", iter->first, packet->i, centralModel2->I);
 
 					sendModel2Update();
 
@@ -263,8 +265,9 @@ void ServerGame::receiveFromClients()
 				case ADD_TO_MODEL_PART:
 				{
 
-					(centralModel->P)->N += packet.i;
-					printf("%i : Server received int %i, Model Part int %i \n", iter->first, packet.i, (centralModel->P)->N);
+					//(centralModel->P)->N += packet.i;
+					(centralModel->P)->N += (packet->p).N;
+					printf("%i : Server received int %i, Model Part int %i \n", iter->first, packet->p.N, (centralModel->P)->N);
 
 					sendModelUpdate();
 
@@ -275,8 +278,8 @@ void ServerGame::receiveFromClients()
 				case CHANGE_MODEL_STRING:
 				{
 
-					centralModel->S = packet.s;
-					printf("%i : Server received string %s, Model string now %s \n", iter->first, (packet.s).c_str(), (centralModel->S).c_str());
+					centralModel->S = packet->s;
+					printf("%i : Server received string %s, Model string now %s \n", iter->first, (packet->s).c_str(), (centralModel->S).c_str());
 
 					sendModelUpdate();
 
@@ -298,13 +301,13 @@ void ServerGame::receiveFromClients()
 					*/
 
 					
-					//centralModel->OVRvec = packet.OVRvec;
+					centralModel->OVRvec = packet->OVRvec;
 					//centralModel->d = packet.u;
-					centralModel->Mat4 = packet.Mat4;
+					//centralModel->Mat4 = packet->Mat4;
 
-					//printf("%i : Server received Vector3f %f, %f, %f, \n", iter->first, (centralModel->OVRvec).x, (centralModel->OVRvec).y, (centralModel->OVRvec).z);
+					printf("%i : Server received Vector3f %f, %f, %f, \n", iter->first, (centralModel->OVRvec).x, (centralModel->OVRvec).y, (centralModel->OVRvec).z);
 					//printf("%i : Server got DWORD %i\n", iter->first, centralModel->d);
-					printf("%i : Server received Matrix4f %f, %f, %f, %f, \n", iter->first, (centralModel->Mat4).M[0][0], (centralModel->Mat4).M[1][1], (centralModel->Mat4).M[2][2], (centralModel->Mat4).M[3][3]);
+					//printf("%i : Server received Matrix4f %f, %f, %f, %f, \n", iter->first, (centralModel->Mat4).M[0][0], (centralModel->Mat4).M[1][1], (centralModel->Mat4).M[2][2], (centralModel->Mat4).M[3][3]);
 
 					sendModelUpdate();
 
@@ -361,7 +364,7 @@ void ServerGame::sendActionPackets()
 }
 */
 
-std::string ServerGame::serializeToChar(Packet packet) 
+std::string ServerGame::serializeToChar(Packet * packet) 
 {
 	// serialize obj into an std::string
 	std::string serial_str;
@@ -379,9 +382,9 @@ std::string ServerGame::serializeToChar(Packet packet)
 	return serial_str;
 }
 
-Packet ServerGame::deserializeToPacket(const char * buffer, int buflen)
+Packet * ServerGame::deserializeToPacket(const char * buffer, int buflen)
 {
-	Packet packet;
+	Packet * packet;
 	// wrap buffer inside a stream and deserialize serial_str into obj
 	boost::iostreams::basic_array_source<char> device(buffer, buflen);
 	boost::iostreams::stream<boost::iostreams::basic_array_source<char> > s(device);
@@ -408,8 +411,8 @@ void ServerGame::sendSizeData(int packet_size) {
 
 void ServerGame::sendActionPackets()
 {
-	Packet packet;
-	packet.packet_type = ACTION_EVENT;
+	Packet * packet = new Packet();
+	packet->packet_type = ACTION_EVENT;
 
 	//const unsigned int packet_size = sizeof(Packet);
 
@@ -461,9 +464,9 @@ void ServerGame::sendModelUpdate()
 
 void ServerGame::sendModelUpdate()
 {
-	Packet packet;
-	packet.packet_type = MODEL_UPDATE;
-	packet.m = *centralModel;
+	Packet * packet = new Packet();
+	packet->packet_type = MODEL_UPDATE;
+	packet->m = *centralModel;
 
 	//const unsigned int packet_size = sizeof(Packet);
 
@@ -501,9 +504,9 @@ void ServerGame::sendModel2Update()
 	//const unsigned int packet_size = sizeof(Packet);
 	//char packet_data[packet_size];
 
-	Packet packet;
-	packet.packet_type = MODEL2_UPDATE;
-	packet.m2 = *centralModel2;
+	Packet * packet = new Packet();
+	packet->packet_type = MODEL2_UPDATE;
+	packet->m2 = *centralModel2;
 
 	//packet.serialize(packet_data);
 	//char * packet_data = serializeToChar(packet);

@@ -23,9 +23,9 @@ public:
 	void sendModel2Update();
 
 	//char * serializeToChar(Packet);
-	std::string serializeToChar(Packet);
+	std::string serializeToChar(Packet*);
 
-	Packet deserializeToPacket(const char *, int);
+	Packet * deserializeToPacket(const char *, int);
 
 	void sendSizeData(int);
 
@@ -34,7 +34,7 @@ private:
    // IDs for the clients connecting for table in ServerNetwork 
     static unsigned int client_id;
 
-	Model * centralModel;
+	Model3 * centralModel;
 	Model2 * centralModel2;
 
    // The ServerNetwork object 

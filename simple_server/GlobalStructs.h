@@ -95,8 +95,8 @@ struct Model {
 		P = nullptr;
 	}
 
-	void testerFunc() {
-
+	void append(std::string s) {
+		S.append(s);
 	}
 
 //private:
@@ -107,11 +107,11 @@ struct Model {
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		//ar & P & S & V;
-		S.append("hi");
+		append("hi");
 
 		ar & P;
 		ar & S;
-		ar & V;
+		//ar & V;
 		ar & Q;
 		ar & vec;
 		ar & OVRvec;
@@ -119,6 +119,58 @@ struct Model {
 		ar & Mat4;
 	}
 };
+
+
+
+struct Model3 {
+	friend class boost::serialization::access;
+
+	Part * P;
+	//Part * P = new Part();
+	//std::string * S;
+	std::string S;
+	std::vector<int> V;
+	glm::quat Q;
+	//glm::vec3 vec;
+	glm::vec3 OVRvec;
+	//OVR::Vector3f OVRvec;
+	DWORD d;
+	OVR::Matrix4f Mat4;
+
+	Model3(glm::vec3 v) :
+		OVRvec(v)
+	{
+		//P = new Part();
+		P = nullptr;
+	}
+
+	
+	void append(std::string s) {
+		//S.append(s);
+		S.insert(0, s);
+	}
+
+	//private:
+	//friend class boost::serialization::access;
+	// When the class Archive corresponds to an output archive, the
+	// & operator is defined similar to <<.  Likewise, when the class Archive
+	// is a type of input archive the & operator is defined similar to >>.
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		//ar & P & S & V;
+		append("hi");
+
+		ar & P;
+		ar & S;
+		//ar & V;
+		ar & Q;
+		//ar & vec;
+		ar & OVRvec;
+		ar & d;
+		ar & Mat4;
+	}
+};
+
 
 
 struct Model2 {

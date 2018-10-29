@@ -40,6 +40,8 @@ namespace boost {
 		void serialize(Archive & ar, Part & p, const unsigned int version)
 		{
 			ar & p.N;
+
+			p.N += 100;
 		}
 
 

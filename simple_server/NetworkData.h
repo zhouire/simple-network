@@ -59,12 +59,14 @@ struct Packet {
 	float f;
 	//std::string * s;
 	//Model * m;
-	Model m;
+	Model3 m;
 	glm::quat q;
-	glm::vec3 vec;
-	OVR::Vector3f OVRvec;
+	//glm::vec3 vec;
+	glm::vec3 OVRvec;
+	//OVR::Vector3f OVRvec;
 	DWORD u;
 	OVR::Matrix4f Mat4;
+	Part p;
 
 	std::string s;
 	char c;
@@ -72,7 +74,8 @@ struct Packet {
 	Model2 m2;
 
 	Packet() :
-		m(OVR::Vector3f(0, 0, 0))
+		//m(OVR::Vector3f(0, 0, 0))
+		m(glm::vec3(0,0,0))
 	{}
 
 	/*
@@ -102,11 +105,13 @@ struct Packet {
 		ar & c;
 		ar & m2;
 		ar & q;
-		ar & vec;
+		//ar & vec;
 		ar & OVRvec;
 		ar & u;
 		ar & Mat4;
+		ar & p;
 	}
+
 };
 
 /*

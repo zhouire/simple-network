@@ -45,8 +45,8 @@ ClientGame::ClientGame(void)
 
     //Packet * packet = new Packet();
     //packet->packet_type = INIT_CONNECTION;
-	Packet packet;
-	packet.packet_type = INIT_CONNECTION;
+	Packet * packet = new Packet();
+	packet->packet_type = INIT_CONNECTION;
 
     //packet.serialize(packet_data);
 	//char * packet_data = serializeToChar(packet);
@@ -67,7 +67,7 @@ ClientGame::~ClientGame(void)
 }
 
 
-std::string ClientGame::serializeToChar(Packet &packet)
+std::string ClientGame::serializeToChar(Packet * packet)
 {
 	/*
 	Model m;
@@ -99,9 +99,9 @@ std::string ClientGame::serializeToChar(Packet &packet)
 	return serial_str;
 }
 
-Packet ClientGame::deserializeToPacket(const char * buffer, int buflen)
+Packet * ClientGame::deserializeToPacket(const char * buffer, int buflen)
 {
-	Packet packet;
+	Packet * packet;
 	// wrap buffer inside a stream and deserialize serial_str into obj
 	boost::iostreams::basic_array_source<char> device(buffer, buflen);
 	boost::iostreams::stream<boost::iostreams::basic_array_source<char> > s(device);
@@ -167,9 +167,9 @@ void ClientGame::addToModelString(std::string * s, int i) {
 
 void ClientGame::addToModel2Int(int i) {
 	
-	Packet packet;
-	packet.packet_type = MODEL2_ADD;
-	packet.i = i;
+	Packet * packet = new Packet();
+	packet->packet_type = MODEL2_ADD;
+	packet->i = i;
 	
 	/*
 	Packet * packet = new Packet();
@@ -207,9 +207,9 @@ void ClientGame::addToModelVector(int i)
 void ClientGame::sendFloat(float f)
 {
 	
-	Packet packet;
-	packet.packet_type = FLOAT_PACKET;
-	packet.f = f;
+	Packet * packet = new Packet();
+	packet->packet_type = FLOAT_PACKET;
+	packet->f = f;
 	
 	/*
 	Packet * packet = new Packet();
@@ -231,9 +231,12 @@ void ClientGame::sendFloat(float f)
 void ClientGame::addToModelPart(int i)
 {
 	
-	Packet packet;
-	packet.packet_type = ADD_TO_MODEL_PART;
-	packet.i = i;
+	Packet * packet = new Packet();
+	packet->packet_type = ADD_TO_MODEL_PART;
+	//packet.i = i;
+	Part part;
+	part.N = i;
+	packet->p = part;
 	
 	/*
 	Packet * packet = new Packet();
@@ -255,9 +258,9 @@ void ClientGame::addToModelPart(int i)
 void ClientGame::changeModelString(std::string str)
 {
 	
-	Packet packet;
-	packet.packet_type = CHANGE_MODEL_STRING;
-	packet.s = str;
+	Packet * packet = new Packet();
+	packet->packet_type = CHANGE_MODEL_STRING;
+	packet->s = str;
 	
 	/*
 	Packet * packet = new Packet();
@@ -277,8 +280,8 @@ void ClientGame::changeModelString(std::string str)
 
 
 void ClientGame::modifyModelQuat(int x, int y, int z, int w) {
-	Packet packet;
-	packet.packet_type = MODIFY_MODEL_QUAT;
+	Packet * packet = new Packet();
+	packet->packet_type = MODIFY_MODEL_QUAT;
 	/*
 	glm::quat quatf(0, 0, 0, 0);
 	if (c == 'x') {
@@ -296,15 +299,15 @@ void ClientGame::modifyModelQuat(int x, int y, int z, int w) {
 	*/
 	//packet.q = glm::quat(w, x, y, z);
 	//printf("%f, %f, %f, %f\n", (packet.q).x, (packet.q).y, (packet.q).z, (packet.q).w);
-	//packet.vec = glm::vec3(x, y, z);
-	//printf("%f,%f,%f\n", (packet.vec).x, (packet.vec).y, (packet.vec).z);
-	//packet.OVRvec = OVR::Vector3f(x, y, z);
-	//printf("%f,%f,%f\n", (packet.OVRvec).x, (packet.OVRvec).y, (packet.OVRvec).z);
+	//packet->vec = glm::vec3(x, y, z);
+	//printf("%f,%f,%f\n", (packet->vec).x, (packet->vec).y, (packet->vec).z);
+	packet->OVRvec = OVR::Vector3f(x, y, z);
+	printf("%f,%f,%f\n", (packet->OVRvec).x, (packet->OVRvec).y, (packet->OVRvec).z);
 	//packet.u = x * 1000;
 	//printf("Client sending DWORD : %i\n", packet.u);
 
-	packet.Mat4 = OVR::Matrix4f(x, y, z, w, x, y, z, w, x, y, z, w, x, y, z, w);
-	printf("%f,%f,%f,%f\n", (packet.Mat4).M[0][0], (packet.Mat4).M[1][1], (packet.Mat4).M[2][2], (packet.Mat4).M[3][3]);
+	//packet->Mat4 = OVR::Matrix4f(x, y, z, w, x, y, z, w, x, y, z, w, x, y, z, w);
+	//printf("%f,%f,%f,%f\n", (packet->Mat4).M[0][0], (packet->Mat4).M[1][1], (packet->Mat4).M[2][2], (packet->Mat4).M[3][3]);
 
 	std::string buffer = serializeToChar(packet);
 	char * packet_data = (char*)(buffer.data());
@@ -318,8 +321,8 @@ void ClientGame::modifyModelQuat(int x, int y, int z, int w) {
 void ClientGame::sendExitPacket()
 {
 	
-	Packet packet;
-	packet.packet_type = CLIENT_EXIT;
+	Packet * packet = new Packet();
+	packet->packet_type = CLIENT_EXIT;
 	
 	/*
 	Packet * packet = new Packet();
@@ -338,7 +341,7 @@ void ClientGame::sendExitPacket()
 
 void ClientGame::update()
 {
-    Packet packet;
+    Packet * packet = new Packet();
 	Size size;
 
     int data_length = network->receivePackets(network_data);
@@ -435,7 +438,7 @@ void ClientGame::update()
         //i += sizeof(Packet);
 		//curPacket = !curPacket;
 
-        switch (packet.packet_type) {
+        switch (packet->packet_type) {
 
             case ACTION_EVENT:
 
@@ -475,9 +478,9 @@ void ClientGame::update()
 
 			case MODEL2_UPDATE:
 			{
-				clientModel2->C = (packet.m2).C;
-				clientModel2->I = (packet.m2).I;
-				clientModel2->P = (packet.m2).P;
+				clientModel2->C = (packet->m2).C;
+				clientModel2->I = (packet->m2).I;
+				clientModel2->P = (packet->m2).P;
 
 				printf("Model2 updated with char %c, int %i, Part %i \n", clientModel2->C, clientModel2->I, (clientModel2->P).N);
 
@@ -486,14 +489,14 @@ void ClientGame::update()
 
 			case MODEL_UPDATE:
 			{
-				*clientModel = packet.m;
+				*clientModel = packet->m;
 
 				printf("Model updated with Part %i, string %s \n", (clientModel->P)->N, (clientModel->S).c_str());
 				//printf("Model updated with Quat %f, %f, %f, %f \n", (clientModel->Q).x, (clientModel->Q).y, (clientModel->Q).z, (clientModel->Q).w);
 				//printf("Model updated with vec3 %f, %f, %f \n", (clientModel->vec).x, (clientModel->vec).y, (clientModel->vec).z);
-				//printf("Model updated with Vector3f %f, %f, %f \n", (clientModel->OVRvec).x, (clientModel->OVRvec).y, (clientModel->OVRvec).z);
+				printf("Model updated with Vector3f %f, %f, %f \n", (clientModel->OVRvec).x, (clientModel->OVRvec).y, (clientModel->OVRvec).z);
 				//printf("Model updated with DWORD %i \n", clientModel->d);
-				printf("Model updated with Matrix4f %f, %f, %f, %f\n", (clientModel->Mat4).M[0][0], (clientModel->Mat4).M[1][1], (clientModel->Mat4).M[2][2], (clientModel->Mat4).M[3][3]);
+				//printf("Model updated with Matrix4f %f, %f, %f, %f\n", (clientModel->Mat4).M[0][0], (clientModel->Mat4).M[1][1], (clientModel->Mat4).M[2][2], (clientModel->Mat4).M[3][3]);
 
 				break;
 			}

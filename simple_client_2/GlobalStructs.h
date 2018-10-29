@@ -6,6 +6,21 @@
 /*
 namespace boost {
 	namespace serialization {
+
+		template<class Archive>
+		void serialize(Archive & ar, glm::detail::tquat<float> & g, const unsigned int version)
+		{
+			ar & g.x;
+			ar & g.y;
+			ar & g.z;
+			ar & g.w;
+		}
+
+	} // namespace serialization
+} // namespace boost
+*/
+namespace boost {
+	namespace serialization {
 		
 		template<class Archive>
 		void serialize(Archive & ar, glm::quat & g, const unsigned int version)
@@ -39,14 +54,12 @@ namespace boost {
 			ar & m.M;
 		}
 
-		
 	} // namespace serialization
 } // namespace boost
-*/
 
 
 struct Part {
-	//friend class boost::serialization::access;
+	friend class boost::serialization::access;
 
 	Part() {}
 
@@ -54,12 +67,26 @@ struct Part {
 
 //private:
 	//friend class boost::serialization::access;
-	/*
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		ar & N;
 	}
-	*/
+};
+
+
+struct Part2 {
+	friend class boost::serialization::access;
+
+	Part2() {}
+
+	int N;
+
+	//private:
+	//friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & N;
+	}
 };
 
 
@@ -72,7 +99,7 @@ struct Model {
 	std::string S;
 	std::vector<int> V;
 	glm::quat Q;
-	glm::vec3 vec;
+	//glm::vec3 vec;
 	OVR::Vector3f OVRvec;
 	DWORD d;
 	OVR::Matrix4f Mat4;
@@ -84,8 +111,8 @@ struct Model {
 		P = nullptr;
 	}
 
-	void testerFunc() {
-
+	void append(std::string s) {
+		S.append(s);
 	}
 
 //private:
@@ -95,17 +122,17 @@ struct Model {
 	// is a type of input archive the & operator is defined similar to >>.
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
-		//ar & P & S & V
+		//ar & P & S & V;
+		append("hi");
+
 		ar & P;
 		ar & S;
-		ar & V;
+		//ar & V;
 		ar & Q;
-		ar & vec;
+		//ar & vec;
 		ar & OVRvec;
 		ar & d;
 		ar & Mat4;
-
-		S.append("c");
 	}
 };
 

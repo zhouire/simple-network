@@ -61,10 +61,11 @@ struct Packet {
 	//Model * m;
 	Model m;
 	glm::quat q;
-	glm::vec3 vec;
+	//glm::vec3 vec;
 	OVR::Vector3f OVRvec;
 	DWORD u;
 	OVR::Matrix4f Mat4;
+	Part p;
 
 	std::string s;
 	char c;
@@ -102,11 +103,13 @@ struct Packet {
 		ar & c;
 		ar & m2;
 		ar & q;
-		ar & vec;
+		//ar & vec;
 		ar & OVRvec;
 		ar & u;
 		ar & Mat4;
+		ar & p;
 	}
+
 };
 
 /*

@@ -74,6 +74,22 @@ struct Part {
 };
 
 
+struct Part2 {
+	friend class boost::serialization::access;
+
+	Part2() {}
+
+	int N;
+
+	//private:
+	//friend class boost::serialization::access;
+	template<class Archive>
+	void serialize(Archive & ar, const unsigned int version) {
+		ar & N;
+	}
+};
+
+
 struct Model {
 	friend class boost::serialization::access;
 
@@ -83,7 +99,7 @@ struct Model {
 	std::string S;
 	std::vector<int> V;
 	glm::quat Q;
-	glm::vec3 vec;
+	//glm::vec3 vec;
 	OVR::Vector3f OVRvec;
 	DWORD d;
 	OVR::Matrix4f Mat4;
@@ -95,8 +111,8 @@ struct Model {
 		P = nullptr;
 	}
 
-	void testerFunc() {
-
+	void append(std::string s) {
+		S.append(s);
 	}
 
 //private:
@@ -107,16 +123,16 @@ struct Model {
 	template<class Archive>
 	void serialize(Archive & ar, const unsigned int version) {
 		//ar & P & S & V;
+		append("hi");
+
 		ar & P;
 		ar & S;
-		ar & V;
+		//ar & V;
 		ar & Q;
-		ar & vec;
+		//ar & vec;
 		ar & OVRvec;
 		ar & d;
 		ar & Mat4;
-
-		S.append("c");
 	}
 };
 
